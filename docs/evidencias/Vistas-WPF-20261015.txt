@@ -1,0 +1,28 @@
+OK WPF: Inicio refleja tres personas ficticias
+VISTA: 01-Inicio-1380.png · 1380 × 880
+OK WPF: Directorio ancho muestra tabla y tres filas
+VISTA: 02-Clientes-1380.png · 1380 × 880
+OK WPF: Las columnas aprovechan el ancho disponible
+OK WPF: Alta inválida muestra errores y no agrega una fila
+VISTA: 03-Validaciones-1380.png · 1380 × 880
+OK WPF: Los mensajes largos se ajustan a varias líneas
+OK WPF: Alta válida desde controles actualiza directorio y cierra panel
+OK WPF: Búsqueda desde controles encuentra el alta
+OK WPF: Consulta recupera la ficha del cliente seleccionado
+VISTA: 04-Ficha-1380.png · 1380 × 880
+VISTA: 05-Clientes-900.png · 900 × 760
+OK WPF: A 900 usa tarjetas y navegación compacta
+VISTA: 06-Clientes-760.png · 760 × 620
+VISTA: 07-Alta-760.png · 760 × 620
+OK WPF: Panel de alta cabe a 760 y conserva la acción de guardar
+VISTA: 08-Inicio-760.png · 760 × 620
+OK WPF: Inicio compacto apila sus tarjetas
+OK WPF: Búsqueda sin resultados presenta un estado vacío explícito
+VISTA: 09-Sin-coincidencias.png · 900 × 760
+OK WPF: Equipos abre únicamente su pantalla de módulo pendiente
+VISTA: 10-Equipos-pendiente.png · 1100 × 780
+OK WPF: Un fallo de datos no se presenta como un directorio vacío exitoso
+VISTA: 11-Error-de-conexion.png · 1100 × 780
+OK WPF: Un guardado fallido conserva el editor y muestra la falta de confirmación
+VISTA: 12-Guardado-no-confirmado.png · 1100 × 780
+RESULTADO WPF: 15 comprobaciones correctas; 12 vistas renderizadas. Sin SQL, sin medir FPS, sin prueba del diseñador ni del foco nativo.

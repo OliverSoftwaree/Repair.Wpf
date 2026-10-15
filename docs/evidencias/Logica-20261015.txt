@@ -1,0 +1,29 @@
+OK: Alta válida y normalización sin modificar la entrada
+OK: Nombre vacío
+OK: Nombre de un carácter
+OK: Nombre mayor de 100
+OK: Nombre sin letras
+OK: Nombre con salto de línea
+OK: Teléfono vacío
+OK: Teléfono con letras
+OK: Teléfono con menos de 7 dígitos
+OK: Teléfono con más de 15 dígitos
+OK: Teléfono mayor de 25 caracteres
+OK: Correo inválido
+OK: Correo con nombre de presentación
+OK: Correo mayor de 150
+OK: Notas mayores de 300
+OK: Correo y notas opcionales
+OK: Límites válidos y nombre con tilde/apóstrofo
+OK: Lista vacía y búsqueda nula
+OK: Búsqueda por código, nombre, teléfono, correo y sin coincidencias
+OK: Limpieza y límite de búsqueda; texto especial llega como dato
+OK: Consulta inexistente y código inválido
+OK: Fallo del repositorio no devuelve un alta exitosa
+OK: Diseño a 760: menú compacto, tarjetas y bloques apilados
+OK: Cambios de diseño en 1100, 1180 y 1280
+OK: Panel lateral cabe en todos los anchos admitidos
+OK: Presentación de código, inicial y correo ausente
+OK: Demostración: tres personas ficticias y copias aisladas
+OK: Demostración: alta, búsqueda literal y consulta por ID
+RESULTADO: 28 correctas; 0 fallidas. Lógica y reglas de presentación; no acredita renderizado ni persistencia SQL.

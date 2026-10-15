@@ -1,0 +1,5 @@
+Sondeo de solo lectura: master. No crea ni modifica bases.
+NO COMPROBADO .: el entorno restringido impide inicializar SqlClient (contadores de rendimiento).
+NO COMPROBADO .\SQLEXPRESS: el entorno restringido impide inicializar SqlClient (contadores de rendimiento).
+NO COMPROBADO tcp:localhost,1433: el entorno restringido impide inicializar SqlClient (contadores de rendimiento).
+Esto no comprueba aún el esquema ni el alta/listado real de RepairAcademico.

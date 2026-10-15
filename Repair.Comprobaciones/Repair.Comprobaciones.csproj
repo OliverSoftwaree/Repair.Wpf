@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration><Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <ProjectGuid>{52268443-0E7A-4343-BB09-D853A7AE451A}</ProjectGuid><OutputType>Exe</OutputType>
+    <RootNamespace>Repair.Comprobaciones</RootNamespace><AssemblyName>Repair.Comprobaciones</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion><LangVersion>7.3</LangVersion><Deterministic>true</Deterministic>
+    <OutputPath>bin\$(Configuration)\</OutputPath><WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'"><DebugSymbols>true</DebugSymbols><DebugType>full</DebugType></PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'"><Optimize>true</Optimize><DebugType>pdbonly</DebugType></PropertyGroup>
+  <ItemGroup><Reference Include="System" /><Reference Include="System.Core" /><Reference Include="System.Data" /><Reference Include="WindowsBase" /><Reference Include="PresentationCore" /><Reference Include="PresentationFramework" /><Reference Include="System.Xaml" /></ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" /><Compile Include="RepositorioPrueba.cs" /><Compile Include="PruebasVisuales.cs" /><None Include="App.config" />
+    <ProjectReference Include="..\Repair.Core\Repair.Core.csproj"><Project>{EE2C0B13-E058-4DDD-8396-C2E5C21F0801}</Project><Name>Repair.Core</Name></ProjectReference>
+    <ProjectReference Include="..\Repair.Wpf\Repair.Wpf.csproj"><Project>{BC9D80A7-D23D-402E-8F82-28B64C862303}</Project><Name>Repair.Wpf</Name></ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

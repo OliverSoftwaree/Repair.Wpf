@@ -1,0 +1,230 @@
+<Window x:Class="Repair.Wpf.MainWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+ Title="Repair · Espacio del taller" Width="1380" Height="880" MinWidth="760" MinHeight="600"
+ WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanResize"
+ Background="{StaticResource Canvas}" SizeChanged="Window_SizeChanged" PreviewKeyDown="Window_PreviewKeyDown"
+ Loaded="Window_Loaded" Closing="Window_Closing">
+  <shell:WindowChrome.WindowChrome><shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="0" CornerRadius="0" UseAeroCaptionButtons="False" /></shell:WindowChrome.WindowChrome>
+  <Border BorderBrush="#324148" BorderThickness="1" Background="{StaticResource Canvas}" TextElement.Foreground="{StaticResource Ink}">
+    <Grid x:Name="RootGrid">
+      <Grid.RowDefinitions><RowDefinition Height="42" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+      <Border Background="#142127" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+        <Grid Margin="18,0,6,0">
+          <TextBlock Text="Repair  /  Espacio del taller" Foreground="#A7BBC4" FontSize="11" VerticalAlignment="Center" />
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource ChromeButton}" Click="Minimize_Click" ToolTip="Minimizar" AutomationProperties.Name="Minimizar"><Path Data="M3,10 L17,10" Style="{StaticResource IconPath}" Width="13" Stroke="#CCDADE" /></Button>
+            <Button Style="{StaticResource ChromeButton}" Click="Maximize_Click" ToolTip="Maximizar o restaurar" AutomationProperties.Name="Maximizar o restaurar"><Path Data="M4,4 L16,4 16,16 4,16 Z" Style="{StaticResource IconPath}" Width="12" Stroke="#CCDADE" /></Button>
+            <Button Style="{StaticResource ChromeButton}" Click="Close_Click" ToolTip="Cerrar Repair" AutomationProperties.Name="Cerrar Repair"><Path Data="{StaticResource IconClose}" Style="{StaticResource IconPath}" Width="13" Stroke="#CCDADE" /></Button>
+          </StackPanel>
+        </Grid>
+      </Border>
+      <Border x:Name="DemoBanner" Grid.Row="1" Background="#FFF0D8" Padding="22,8" Visibility="Collapsed">
+        <TextBlock Text="DEMOSTRACIÓN · Personas ficticias y datos temporales. Los cambios se pierden al cerrar." FontSize="11" Foreground="#7E491A" HorizontalAlignment="Center" />
+      </Border>
+      <Grid x:Name="Workspace" Grid.Row="2">
+        <Grid.ColumnDefinitions><ColumnDefinition x:Name="SidebarColumn" Width="232" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+        <Border Background="#1C2A30">
+          <Grid x:Name="SidebarContent" Margin="18,28,18,20">
+            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+            <StackPanel>
+              <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="42" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Width="40" Height="42" Background="{StaticResource Accent}" CornerRadius="12"><Path Data="{StaticResource IconWrench}" Style="{StaticResource IconPath}" Width="22" Height="24" Stroke="#30251C" /></Border>
+                <StackPanel x:Name="BrandText" Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                  <TextBlock Text="REPAIR" FontWeight="Bold" FontSize="22" Foreground="White" />
+                  <TextBlock Text="PERSONAS · TECNOLOGÍA" FontSize="8" Foreground="#9CB2BC" Margin="0,3,0,0" />
+                </StackPanel>
+              </Grid>
+              <Border x:Name="WorkspaceLabel" Margin="0,26,0,16" BorderBrush="#3A484D" BorderThickness="0,0,0,1" Padding="10,0,0,16"><TextBlock Text="ESPACIO DE RECEPCIÓN" Foreground="#8DA6B1" FontSize="9" FontWeight="SemiBold" /></Border>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+              <Button x:Name="NavHome" Style="{StaticResource NavButton}" Click="NavHome_Click" ToolTip="Inicio" AutomationProperties.Name="Inicio">
+                <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconHome}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavHomeText" Text="Inicio" Margin="14,0,0,0" /></StackPanel>
+              </Button>
+              <Button x:Name="NavClients" Style="{StaticResource NavButton}" Click="NavClients_Click" ToolTip="Clientes" AutomationProperties.Name="Clientes">
+                <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconClients}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavClientsText" Text="Clientes" Margin="14,0,0,0" /></StackPanel>
+              </Button>
+              <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="NavDevices_Click" ToolTip="Equipos · próximo avance" AutomationProperties.Name="Equipos, próximo avance">
+                <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconDevices}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavDevicesText" Text="Equipos" Margin="14,0,0,0" /></StackPanel>
+              </Button>
+              <Border x:Name="NextModuleLabel" Background="#25343A" CornerRadius="7" Margin="14,9,14,0" Padding="9,6"><TextBlock Text="Equipos: próximo avance" FontSize="10" Foreground="#9DB0B9" TextAlignment="Center" /></Border>
+            </StackPanel>
+            <Border Grid.Row="3" BorderBrush="#3A484D" BorderThickness="0,1,0,0" Padding="4,18,4,0">
+              <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="32" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Background="#36474F" CornerRadius="9" Height="32"><TextBlock Text="B" Foreground="#E7EFF1" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
+                <StackPanel x:Name="TeamText" Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="Grupo B" FontSize="12" Foreground="#EDF2F3" /><TextBlock Text="Proyecto Integrador I · v0.2" FontSize="9" Foreground="#8EA8B4" Margin="0,3,0,0" /></StackPanel>
+              </Grid>
+            </Border>
+          </Grid>
+        </Border>
+        <Grid x:Name="ContentArea" Grid.Column="1" Margin="34,24,34,22">
+          <Grid.RowDefinitions><RowDefinition Height="48" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+          <Grid>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top"><TextBlock Text="TALLER" Style="{StaticResource Kicker}" /><TextBlock Text=" / " Foreground="#B9C6CC" Margin="8,0" FontSize="10" /><TextBlock x:Name="Breadcrumb" Text="VISTA GENERAL" Style="{StaticResource Kicker}" Foreground="{StaticResource Ink}" /></StackPanel>
+            <Border Background="White" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="15" Padding="10,5" HorizontalAlignment="Right" VerticalAlignment="Top">
+              <StackPanel Orientation="Horizontal"><Ellipse x:Name="ConnectionDot" Width="6" Height="6" Fill="#8B9DA5" Margin="0,0,7,0" /><TextBlock x:Name="ConnectionText" Text="Conexión pendiente" FontSize="10" Foreground="{StaticResource Muted}" /></StackPanel>
+            </Border>
+          </Grid>
+          <Grid x:Name="PageHost" Grid.Row="1"><Grid.RenderTransform><TranslateTransform /></Grid.RenderTransform>
+            <ScrollViewer x:Name="HomePage" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,4,0">
+              <StackPanel>
+                <Border CornerRadius="22" BorderBrush="#E9DCCE" BorderThickness="1" Padding="30,28,30,30">
+                  <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#FFF2E2" Offset="0" /><GradientStop Color="#F8E9D9" Offset="1" /></LinearGradientBrush></Border.Background>
+                  <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition x:Name="HeroArtColumn" Width="270" /></Grid.ColumnDefinitions>
+                    <StackPanel>
+                      <StackPanel Orientation="Horizontal" Margin="0,0,0,18"><Border Width="6" Height="6" CornerRadius="2" Background="#B9662D" Margin="0,0,8,0" /><TextBlock Text="RECEPCIÓN CON PROPÓSITO" FontWeight="Bold" FontSize="10" Foreground="#94613D" /></StackPanel>
+                      <TextBlock x:Name="HeroTitle" Text="Todo empieza&#10;con confianza." FontSize="39" FontWeight="SemiBold" LineHeight="45" Foreground="#26383E" />
+                      <TextBlock Text="Personas, tecnología y una atención que se siente cercana. Dale a cada cliente un buen comienzo." Foreground="#796B5F" LineHeight="23" Margin="0,17,0,24" MaxWidth="440" HorizontalAlignment="Left" />
+                      <WrapPanel>
+                        <Button Style="{StaticResource PrimaryButton}" Click="NewClient_Click" Margin="0,0,10,8" AutomationProperties.Name="Registrar cliente desde inicio"><StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconPlus}" Style="{StaticResource IconPath}" Width="16" Height="16" Margin="0,0,8,0" /><TextBlock Text="Registrar cliente" /></StackPanel></Button>
+                        <Button Background="#FFF8F0" BorderBrush="#E4D2BF" Click="NavClients_Click" Margin="0,0,0,8"><StackPanel Orientation="Horizontal"><TextBlock Text="Ver directorio" /><Path Data="{StaticResource IconArrow}" Style="{StaticResource IconPath}" Width="16" Height="16" Margin="10,0,0,0" /></StackPanel></Button>
+                      </WrapPanel>
+                    </StackPanel>
+                    <Viewbox x:Name="HeroArt" Grid.Column="1" Margin="15,0,0,0" MaxHeight="260" Stretch="Uniform" IsHitTestVisible="False">
+                      <Canvas Width="260" Height="258">
+                        <Ellipse Width="225" Height="225" Canvas.Left="18" Canvas.Top="13" Fill="#F1DBC2" />
+                        <Ellipse Width="181" Height="181" Canvas.Left="40" Canvas.Top="35" Stroke="#E6C7A6" StrokeThickness="1" />
+                        <Border Canvas.Left="26" Canvas.Top="59" Width="204" Height="139" Background="#293C44" CornerRadius="13" RenderTransformOrigin="0.5,0.5"><Border.RenderTransform><RotateTransform Angle="-7" /></Border.RenderTransform>
+                          <Grid Margin="10"><Border Background="#344E57" CornerRadius="6" /><Path Data="M18,79 L51,79 51,48 79,48 79,27 119,27 M79,48 L123,48 123,70 160,70" Stroke="#5D7B84" StrokeThickness="2" Margin="4" /><Border Width="61" Height="61" Background="#EF9251" CornerRadius="16" HorizontalAlignment="Center" VerticalAlignment="Center"><Path Data="{StaticResource IconWrench}" Style="{StaticResource IconPath}" Width="30" Height="30" Stroke="#3A3025" /></Border></Grid>
+                        </Border>
+                        <Border Canvas.Left="149" Canvas.Top="169" Background="White" CornerRadius="12" Width="103" Height="55" BorderBrush="#E8DCCF" BorderThickness="1"><StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"><Border Background="#E5F1EA" CornerRadius="8" Width="27" Height="27" Margin="0,0,8,0"><Path Data="{StaticResource IconCheck}" Style="{StaticResource IconPath}" Stroke="#3E7461" Width="14" Height="14" /></Border><TextBlock Text="Cercanía" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center" /></StackPanel></Border>
+                        <Rectangle Canvas.Left="13" Canvas.Top="180" Width="11" Height="11" RadiusX="3" RadiusY="3" Fill="#D6874C" />
+                        <Ellipse Canvas.Left="231" Canvas.Top="38" Width="8" Height="8" Fill="#D6874C" />
+                      </Canvas>
+                    </Viewbox>
+                  </Grid>
+                </Border>
+                <Grid x:Name="HomeBottom" Margin="0,22,0,0">
+                  <Grid.ColumnDefinitions><ColumnDefinition x:Name="HomeLeftColumn" Width="1.3*" /><ColumnDefinition x:Name="HomeRightColumn" Width="*" /></Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                  <Border x:Name="StartCard" Style="{StaticResource Card}" Margin="0,0,18,0">
+                    <StackPanel>
+                      <TextBlock Text="Tu punto de partida" FontSize="19" FontWeight="SemiBold" />
+                      <TextBlock Text="Una recepción ordenada, paso a paso." Style="{StaticResource MutedText}" FontSize="12" Margin="0,7,0,18" />
+                      <Button Style="{StaticResource QuietButton}" HorizontalContentAlignment="Stretch" Padding="0,10" Click="NewClient_Click"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="38" /><ColumnDefinition Width="*" /><ColumnDefinition Width="22" /></Grid.ColumnDefinitions><TextBlock Text="01" Foreground="#B86B36" FontSize="12" VerticalAlignment="Center" /><StackPanel Grid.Column="1"><TextBlock Text="Conoce a tu cliente" FontSize="13" /><TextBlock Text="Registra sus datos de contacto." Style="{StaticResource MutedText}" FontSize="11" FontWeight="Normal" /></StackPanel><Path Grid.Column="2" Data="{StaticResource IconArrow}" Style="{StaticResource IconPath}" Width="15" Stroke="{StaticResource Muted}" /></Grid></Button>
+                      <Border Height="1" Background="#EDF1F3" Margin="0,8" />
+                      <Button Style="{StaticResource QuietButton}" HorizontalContentAlignment="Stretch" Padding="0,10" Click="NavClients_Click"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="38" /><ColumnDefinition Width="*" /><ColumnDefinition Width="22" /></Grid.ColumnDefinitions><TextBlock Text="02" Foreground="#B86B36" FontSize="12" VerticalAlignment="Center" /><StackPanel Grid.Column="1"><TextBlock Text="Encuentra su ficha" FontSize="13" /><TextBlock Text="Busca y consulta en un solo lugar." Style="{StaticResource MutedText}" FontSize="11" FontWeight="Normal" /></StackPanel><Path Grid.Column="2" Data="{StaticResource IconArrow}" Style="{StaticResource IconPath}" Width="15" /></Grid></Button>
+                    </StackPanel>
+                  </Border>
+                  <Border x:Name="DirectoryCard" Grid.Column="1" Style="{StaticResource Card}">
+                    <StackPanel>
+                      <Grid><TextBlock Text="DIRECTORIO" Style="{StaticResource Kicker}" /><Path Data="{StaticResource IconClients}" Style="{StaticResource IconPath}" HorizontalAlignment="Right" Stroke="#8AA0AA" /></Grid>
+                      <StackPanel Orientation="Horizontal" Margin="0,13,0,2"><TextBlock x:Name="HomeCount" Text="—" FontSize="40" FontWeight="SemiBold" /><TextBlock Text="clientes" FontSize="13" Foreground="{StaticResource Muted}" VerticalAlignment="Bottom" Margin="10,0,0,10" /></StackPanel>
+                      <TextBlock x:Name="HomeCountHint" Text="Consulta pendiente." FontSize="11" Style="{StaticResource MutedText}" />
+                      <Button Content="Abrir directorio →" HorizontalAlignment="Left" Style="{StaticResource QuietButton}" Padding="0,12" Click="NavClients_Click" Margin="0,7,0,0" />
+                      <Border Background="#F5F7F8" CornerRadius="9" Padding="12" Margin="0,8,0,0"><TextBlock Text="Los equipos se incorporarán en el próximo avance." FontSize="11" Foreground="{StaticResource Muted}" /></Border>
+                    </StackPanel>
+                  </Border>
+                </Grid>
+                <TextBlock Text="REPAIR · Cuidar los detalles también es parte de reparar." FontSize="10" Foreground="#8A9BA4" Margin="2,23,0,5" />
+              </StackPanel>
+            </ScrollViewer>
+
+            <Grid x:Name="ClientsPage" Visibility="Collapsed">
+              <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+              <Grid Margin="0,0,0,24"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel Margin="0,0,15,0"><TextBlock Text="Personas primero." FontSize="30" FontWeight="SemiBold" /><TextBlock Text="Cada cliente, con sus datos claros y a mano." Style="{StaticResource MutedText}" FontSize="12" Margin="0,8,0,0" /></StackPanel>
+                <Button x:Name="NewClientButton" Grid.Column="1" Style="{StaticResource PrimaryButton}" VerticalAlignment="Top" Click="NewClient_Click" ToolTip="Nuevo cliente · Ctrl+N" AutomationProperties.AutomationId="NuevoCliente"><StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconPlus}" Style="{StaticResource IconPath}" Width="16" Height="16" Margin="0,0,9,0" /><TextBlock Text="Nuevo cliente" /></StackPanel></Button>
+              </Grid>
+              <Border Grid.Row="1" Style="{StaticResource Card}" Padding="14" Margin="0,0,0,15">
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                  <Grid><TextBox x:Name="SearchInput" MaxLength="100" Padding="38,11,12,11" KeyDown="SearchInput_KeyDown" AutomationProperties.Name="Buscar clientes" ToolTip="Nombre, teléfono, correo o código numérico · Enter para buscar" /><Path Data="{StaticResource IconSearch}" Style="{StaticResource IconPath}" Stroke="#8C9EA7" Width="17" Height="17" HorizontalAlignment="Left" Margin="12,0,0,0" IsHitTestVisible="False" /><TextBlock Text="Nombre, teléfono, correo o código" Foreground="#83959F" Margin="38,0,10,0" VerticalAlignment="Center" IsHitTestVisible="False" FontSize="12"><TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding Text, ElementName=SearchInput}" Value=""><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style></TextBlock></Grid>
+                  <Button x:Name="SearchButton" Grid.Column="1" Content="Buscar" Click="Search_Click" Margin="10,0,0,0" />
+                  <Button x:Name="ResetSearchButton" Grid.Column="2" Click="ResetSearch_Click" Style="{StaticResource QuietButton}" ToolTip="Ver todos los clientes" Margin="5,0,0,0" AutomationProperties.Name="Ver todos los clientes"><Path Data="{StaticResource IconRefresh}" Style="{StaticResource IconPath}" Width="17" Height="17" Stroke="#6C828D" /></Button>
+                </Grid>
+              </Border>
+              <Border x:Name="ListNotice" Grid.Row="2" Background="#FDEEEB" BorderBrush="#EDC8C1" BorderThickness="1" CornerRadius="10" Padding="13,10" Margin="0,0,0,12" Visibility="Collapsed"><TextBlock x:Name="ListNoticeText" Foreground="#98463F" FontSize="12" LineHeight="19" AutomationProperties.LiveSetting="Polite" /></Border>
+              <Grid Grid.Row="3">
+                <Border x:Name="TableContainer" Background="White" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="14" Padding="1" ClipToBounds="True">
+                  <DataGrid x:Name="ClientsTable" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                    CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" SelectionMode="Single" SelectionUnit="FullRow"
+                    HeadersVisibility="Column" RowHeaderWidth="0" BorderThickness="0" Background="White" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#F0F3F4"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" MouseDoubleClick="ClientsTable_MouseDoubleClick" KeyDown="ClientsTable_KeyDown"
+                    AutomationProperties.Name="Directorio de clientes" EnableRowVirtualization="True" SizeChanged="ClientsTable_SizeChanged">
+                    <DataGrid.Columns>
+                      <DataGridTemplateColumn Header="CLIENTE" Width="2*" MinWidth="180"><DataGridTemplateColumn.CellTemplate><DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="14,10"><Border Width="35" Height="35" CornerRadius="11" Background="#EAF0F2" Margin="0,0,11,0"><TextBlock Text="{Binding Inicial}" Foreground="#506E7C" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" /></Border><StackPanel VerticalAlignment="Center"><TextBlock Text="{Binding Nombre}" FontWeight="SemiBold" FontSize="12" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="230" /><TextBlock Text="{Binding Codigo}" FontSize="10" Foreground="{StaticResource Muted}" Margin="0,3,0,0" /></StackPanel></StackPanel>
+                      </DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+                      <DataGridTemplateColumn Header="TELÉFONO" Width="1.2*" MinWidth="130"><DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Telefono}" Margin="16,0" FontSize="12" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+                      <DataGridTemplateColumn Header="CORREO" Width="1.7*" MinWidth="160"><DataGridTemplateColumn.CellTemplate><DataTemplate><TextBlock Text="{Binding Correo}" Margin="16,0" FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+                      <DataGridTemplateColumn Header="" Width="94"><DataGridTemplateColumn.CellTemplate><DataTemplate><Button Content="Ver ficha →" Style="{StaticResource QuietButton}" FontSize="11" Click="ViewClient_Click" AutomationProperties.Name="Ver ficha del cliente" /></DataTemplate></DataGridTemplateColumn.CellTemplate></DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                  </DataGrid>
+                </Border>
+                <ListBox x:Name="ClientsCards" Visibility="Collapsed" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AutomationProperties.Name="Tarjetas de clientes">
+                  <ListBox.ItemTemplate><DataTemplate>
+                    <Border Style="{StaticResource Card}" Padding="16">
+                      <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="44" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <Border Width="34" Height="34" VerticalAlignment="Top" Background="#EAF0F2" CornerRadius="11" HorizontalAlignment="Left"><TextBlock Text="{Binding Inicial}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#506E7C" FontWeight="SemiBold" /></Border>
+                        <StackPanel Grid.Column="1" Margin="0,0,10,0"><TextBlock Text="{Binding Nombre}" FontWeight="SemiBold" FontSize="14" /><TextBlock Text="{Binding Codigo}" Foreground="{StaticResource Muted}" FontSize="10" Margin="0,3,0,8" /><TextBlock Text="{Binding Telefono}" FontSize="12" /><TextBlock Text="{Binding Correo}" FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0" /></StackPanel>
+                        <Button Grid.Column="2" Content="Ver ficha →" Style="{StaticResource QuietButton}" FontSize="11" VerticalAlignment="Center" Click="ViewClient_Click" />
+                      </Grid>
+                    </Border>
+                  </DataTemplate></ListBox.ItemTemplate>
+                </ListBox>
+                <Border x:Name="EmptyState" Background="White" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="14" Visibility="Collapsed" Padding="24">
+                  <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="340">
+                    <Border Background="#F3F6F7" Width="66" Height="66" CornerRadius="21" Margin="0,0,0,20"><Path Data="{StaticResource IconClients}" Style="{StaticResource IconPath}" Width="28" Height="28" Stroke="#718D9A" /></Border>
+                    <TextBlock x:Name="EmptyTitle" Text="Aquí empieza tu directorio" FontSize="22" FontWeight="SemiBold" TextAlignment="Center" />
+                    <TextBlock x:Name="EmptyDescription" Text="Registra al primer cliente para tener sus datos siempre a mano." Style="{StaticResource MutedText}" FontSize="12" TextAlignment="Center" Margin="0,10,0,20" />
+                    <Button x:Name="EmptyAction" Content="Registrar cliente" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Center" Click="EmptyAction_Click" />
+                  </StackPanel>
+                </Border>
+              </Grid>
+              <Grid Grid.Row="4" Margin="2,13,2,0"><TextBlock x:Name="ResultsText" Text="Consulta pendiente" Foreground="{StaticResource Muted}" FontSize="11" /><TextBlock x:Name="ListKeyboardHint" Text="Ctrl+N  Nuevo cliente    ·    Ctrl+F  Buscar" Foreground="#8DA0AA" FontSize="10" HorizontalAlignment="Right" /></Grid>
+            </Grid>
+
+            <Grid x:Name="DevicesPage" Visibility="Collapsed">
+              <Border Style="{StaticResource Card}" MaxWidth="700" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="38">
+                <StackPanel>
+                  <Border Width="66" Height="66" CornerRadius="20" Background="#FFF0E3" HorizontalAlignment="Left" Margin="0,0,0,24"><Path Data="{StaticResource IconDevices}" Style="{StaticResource IconPath}" Stroke="#AB6C3F" Width="30" Height="30" /></Border>
+                  <TextBlock Text="El próximo paso:&#10;darle un lugar a cada equipo." FontSize="30" FontWeight="SemiBold" LineHeight="38" />
+                  <TextBlock Text="Este espacio conectará los equipos con sus clientes y reunirá sus datos de recepción." Style="{StaticResource MutedText}" Margin="0,16,0,22" />
+                  <Border Background="#F4F7F8" CornerRadius="9" Padding="14"><TextBlock Text="Próximo avance · El módulo de equipos todavía no está disponible." FontSize="12" Foreground="#6A818D" /></Border>
+                  <Button Content="Volver a clientes →" Style="{StaticResource PrimaryButton}" Click="NavClients_Click" HorizontalAlignment="Left" Margin="0,24,0,0" />
+                </StackPanel>
+              </Border>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <ProgressBar x:Name="BusyIndicator" Grid.Row="2" Height="3" VerticalAlignment="Top" Foreground="{StaticResource Accent}" Background="#F8DEC7" IsIndeterminate="True" Visibility="Collapsed" IsHitTestVisible="False" />
+
+      <Grid x:Name="DrawerOverlay" Grid.Row="2" Visibility="Collapsed" KeyboardNavigation.TabNavigation="Cycle">
+        <Border x:Name="Dimmer" Background="#780E1B21" MouseLeftButtonDown="Dimmer_MouseLeftButtonDown" />
+        <Border x:Name="DrawerPanel" Width="480" Background="White" HorizontalAlignment="Right" CornerRadius="22,0,0,22" BorderBrush="{StaticResource Line}" BorderThickness="1,0,0,0">
+          <Border.RenderTransform><TranslateTransform /></Border.RenderTransform>
+          <Grid Margin="28,26,28,24"><Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+            <Grid Margin="0,0,0,14"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions><StackPanel><TextBlock x:Name="DrawerKicker" Text="DIRECTORIO / NUEVO REGISTRO" Style="{StaticResource Kicker}" /><TextBlock x:Name="DrawerTitle" Text="Un nuevo comienzo." FontSize="26" FontWeight="SemiBold" Margin="0,9,0,0" /></StackPanel><Button x:Name="CloseDrawerButton" Grid.Column="1" Style="{StaticResource QuietButton}" Click="CloseDrawer_Click" VerticalAlignment="Top" ToolTip="Cerrar · Esc" AutomationProperties.Name="Cerrar panel"><Path Data="{StaticResource IconClose}" Style="{StaticResource IconPath}" Width="17" Height="17" /></Button></Grid>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,6,0">
+              <StackPanel>
+                <StackPanel x:Name="EditorFields">
+                  <TextBlock Text="Empecemos por los datos de contacto. Los campos con * son obligatorios." Style="{StaticResource MutedText}" FontSize="12" />
+                  <TextBlock Text="Nombre completo *" Style="{StaticResource FieldLabel}" /><TextBox x:Name="NameInput" MaxLength="100" AutomationProperties.Name="Nombre completo" TextChanged="Input_TextChanged" /><TextBlock x:Name="NameError" Text="" Style="{StaticResource FieldError}" />
+                  <TextBlock Text="Teléfono *" Style="{StaticResource FieldLabel}" /><TextBox x:Name="PhoneInput" MaxLength="25" AutomationProperties.Name="Teléfono" TextChanged="Input_TextChanged" /><TextBlock x:Name="PhoneError" Text="" Style="{StaticResource FieldError}" />
+                  <TextBlock Text="Correo electrónico" Style="{StaticResource FieldLabel}" /><TextBox x:Name="EmailInput" MaxLength="150" AutomationProperties.Name="Correo electrónico" TextChanged="Input_TextChanged" /><TextBlock x:Name="EmailError" Text="" Style="{StaticResource FieldError}" />
+                  <TextBlock Text="Notas de atención" Style="{StaticResource FieldLabel}" /><TextBox x:Name="NotesInput" MaxLength="300" MinHeight="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto" TextChanged="Input_TextChanged" AutomationProperties.Name="Notas de atención" /><TextBlock x:Name="NotesError" Text="" Style="{StaticResource FieldError}" />
+                  <TextBlock Text="Opcional · hasta 300 caracteres" FontSize="10" Foreground="#8B9FA9" Margin="0,7,0,16" />
+                </StackPanel>
+                <StackPanel x:Name="DetailFields" Visibility="Collapsed">
+                  <Border Background="#F5F8F9" CornerRadius="14" Padding="18" Margin="0,0,0,4"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="56" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Border Background="#E3EBEF" Width="43" Height="43" CornerRadius="13" HorizontalAlignment="Left"><TextBlock x:Name="DetailInitial" FontSize="19" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#557383" /></Border><StackPanel Grid.Column="1"><TextBlock x:Name="DetailName" FontSize="18" FontWeight="SemiBold" /><TextBlock x:Name="DetailCode" FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0" /></StackPanel></Grid></Border>
+                  <TextBlock Text="TELÉFONO" Style="{StaticResource Kicker}" Margin="0,25,0,9" /><TextBox x:Name="DetailPhone" IsReadOnly="True" BorderThickness="0" Background="#F8FAFB" AutomationProperties.Name="Teléfono de la ficha" />
+                  <TextBlock Text="CORREO ELECTRÓNICO" Style="{StaticResource Kicker}" Margin="0,23,0,9" /><TextBox x:Name="DetailEmail" IsReadOnly="True" BorderThickness="0" Background="#F8FAFB" TextWrapping="Wrap" AutomationProperties.Name="Correo de la ficha" />
+                  <TextBlock Text="NOTAS DE ATENCIÓN" Style="{StaticResource Kicker}" Margin="0,23,0,9" /><TextBox x:Name="DetailNotes" IsReadOnly="True" BorderThickness="0" Background="#F8FAFB" TextWrapping="Wrap" MinHeight="90" VerticalContentAlignment="Top" AutomationProperties.Name="Notas de la ficha" />
+                  <TextBlock Text="FECHA DE REGISTRO" Style="{StaticResource Kicker}" Margin="0,23,0,9" /><TextBlock x:Name="DetailDate" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,0,0,20" />
+                </StackPanel>
+                <Border x:Name="EditorNotice" Background="#FDEEEB" CornerRadius="10" Padding="12" Visibility="Collapsed" Margin="0,10,0,14"><TextBlock x:Name="EditorNoticeText" Foreground="#98463F" FontSize="12" LineHeight="19" AutomationProperties.LiveSetting="Assertive" /></Border>
+              </StackPanel>
+            </ScrollViewer>
+            <Grid Grid.Row="2" Margin="0,20,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions><Button x:Name="CancelDrawerButton" Content="Cancelar" Click="CloseDrawer_Click" Margin="0,0,10,0" /><Button x:Name="SaveButton" Grid.Column="1" Content="Guardar cliente" Style="{StaticResource PrimaryButton}" Click="SaveClient_Click" AutomationProperties.AutomationId="GuardarCliente" /></Grid>
+          </Grid>
+        </Border>
+      </Grid>
+      <Border x:Name="Toast" Grid.Row="2" Background="#243D35" CornerRadius="12" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="24" Padding="18,13" Visibility="Collapsed" MaxWidth="620" IsHitTestVisible="False">
+        <StackPanel Orientation="Horizontal"><Path x:Name="ToastIcon" Data="{StaticResource IconCheck}" Style="{StaticResource IconPath}" Stroke="#A9D0B9" Width="16" Height="16" Margin="0,0,11,0" /><TextBlock x:Name="ToastText" Foreground="White" FontSize="12" AutomationProperties.LiveSetting="Polite" /></StackPanel>
+      </Border>
+    </Grid>
+  </Border>
+</Window>
