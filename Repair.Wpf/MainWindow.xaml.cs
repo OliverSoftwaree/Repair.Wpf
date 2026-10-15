@@ -14,6 +14,7 @@ using Repair.Core.Logica;
 using Repair.Core.Modelos;
 using Repair.Wpf.Integracion;
 using Repair.Wpf.Presentacion;
+using System.Configuration;
 
 namespace Repair.Wpf
 {
@@ -61,6 +62,18 @@ namespace Repair.Wpf
         {
             ApplyLayout();
             if (servicio != null) await LoadClientsAsync();
+            // Inicializar control de equipos integrado en la página
+            try
+            {
+                IEquipoRepositorio repo;
+                if (demostracion) repo = new Repair.Wpf.Demostracion.EquipoMemoriaRepositorio();
+                else repo = new EquipoSqlRepositorio(System.Configuration.ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString);
+                var servicioEquipos = new EquipoServicio(repo);
+                EquiposControl.Initialize(servicioEquipos, servicio);
+                // Si hay un módulo externo disponible, mostrar botón para abrir la ventana también.
+                OpenEquiposWindowButton.Visibility = equipos != null ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch { /* no bloquear inicio si falla la inicialización de equipos */ }
         }
 
         private void ShowPage(string pagina, bool animar = true)
@@ -157,8 +170,7 @@ namespace Repair.Wpf
         private void NavDevices_Click(object sender, RoutedEventArgs e)
         {
             if (panelAbierto || ocupado) return;
-            if (equipos == null) ShowPage("Equipos");
-            else equipos.Abrir(this, servicio);
+            ShowPage("Equipos");
         }
 
         private async void Search_Click(object sender, RoutedEventArgs e) { await LoadClientsAsync(); }
@@ -212,6 +224,12 @@ namespace Repair.Wpf
             Dispatcher.BeginInvoke(new Action(() => { foco.Focus(); Keyboard.Focus(foco); }), DispatcherPriority.Input);
         }
 
+        private void OpenEquiposWindow_Click(object sender, RoutedEventArgs e)
+        {
+            if (equipos == null) return;
+            equipos.Abrir(this, servicio);
+        }
+
         private async Task CloseDrawerAsync()
         {
             if (!panelAbierto || ocupado || panelEnTransicion) return;
@@ -244,6 +262,7 @@ namespace Repair.Wpf
                 ShowToast(demostracion ? "Cliente CL-" + id.ToString("0000") + " añadido a la demostración. Es temporal." : "Cliente CL-" + id.ToString("0000") + " registrado en el directorio.");
                 SearchInput.Clear();
                 await LoadClientsAsync();
+                try { if (EquiposControl != null) await EquiposControl.RefrescarClientesAsync(); } catch { /* no bloquear UI si falla refresco de equipos */ }
             }
             catch (ValidacionException ex)
             {

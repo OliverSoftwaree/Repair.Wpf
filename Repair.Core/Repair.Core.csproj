@@ -1,19 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration><Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
-    <ProjectGuid>{EE2C0B13-E058-4DDD-8396-C2E5C21F0801}</ProjectGuid><OutputType>Library</OutputType>
-    <RootNamespace>Repair.Core</RootNamespace><AssemblyName>Repair.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion><LangVersion>7.3</LangVersion><Deterministic>true</Deterministic>
-    <WarningLevel>4</WarningLevel><OutputPath>bin\$(Configuration)\</OutputPath>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <ProjectGuid>{EE2C0B13-E058-4DDD-8396-C2E5C21F0801}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Repair.Core</RootNamespace>
+    <AssemblyName>Repair.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>7.3</LangVersion>
+    <Deterministic>true</Deterministic>
+    <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'"><DebugSymbols>true</DebugSymbols><DebugType>full</DebugType></PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'"><Optimize>true</Optimize><DebugType>pdbonly</DebugType></PropertyGroup>
-  <ItemGroup><Reference Include="System" /><Reference Include="System.Core" /><Reference Include="System.Data" /></ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Modelos\Cliente.cs" /><Compile Include="Logica\ClienteServicio.cs" /><Compile Include="Logica\ValidacionException.cs" />
-    <Compile Include="Datos\IClienteRepositorio.cs" /><Compile Include="Datos\ClienteSqlRepositorio.cs" /><Compile Include="Datos\AccesoDatosException.cs" />
-    <Compile Include="Integracion\IConsultaClientes.cs" /><Compile Include="Integracion\EquipoContrato.cs" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Datos\EquipoSqlRepositorio.cs" />
+    <Compile Include="Datos\IEquipoRepositorio.cs" />
+    <Compile Include="Integracion\IConsultaEquipos.cs" />
+    <Compile Include="Logica\EquipoServicio.cs" />
+    <Compile Include="Modelos\Cliente.cs" />
+    <Compile Include="Logica\ClienteServicio.cs" />
+    <Compile Include="Logica\ValidacionException.cs" />
+    <Compile Include="Datos\IClienteRepositorio.cs" />
+    <Compile Include="Datos\ClienteSqlRepositorio.cs" />
+    <Compile Include="Datos\AccesoDatosException.cs" />
+    <Compile Include="Integracion\IConsultaClientes.cs" />
+    <Compile Include="Integracion\EquipoContrato.cs" />
+    <Compile Include="Modelos\Equipo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

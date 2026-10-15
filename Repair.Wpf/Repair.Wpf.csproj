@@ -1,31 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration><Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
     <ProjectGuid>{BC9D80A7-D23D-402E-8F82-28B64C862303}</ProjectGuid>
     <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>WinExe</OutputType><RootNamespace>Repair.Wpf</RootNamespace><AssemblyName>Repair.Wpf</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion><LangVersion>7.3</LangVersion><Deterministic>true</Deterministic>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects><ApplicationManifest>app.manifest</ApplicationManifest>
-    <OutputPath>bin\$(Configuration)\</OutputPath><WarningLevel>4</WarningLevel>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Repair.Wpf</RootNamespace>
+    <AssemblyName>Repair.Wpf</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>7.3</LangVersion>
+    <Deterministic>true</Deterministic>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'"><DebugSymbols>true</DebugSymbols><DebugType>full</DebugType><StartArguments>--demo</StartArguments></PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'"><Optimize>true</Optimize><DebugType>pdbonly</DebugType></PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <StartArguments>--demo</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" /><Reference Include="System.Core" /><Reference Include="System.Configuration" />
-    <Reference Include="System.Xaml" /><Reference Include="WindowsBase" /><Reference Include="PresentationCore" /><Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml"><Generator>MSBuild:Compile</Generator><SubType>Designer</SubType></ApplicationDefinition>
-    <Page Include="MainWindow.xaml"><Generator>MSBuild:Compile</Generator><SubType>Designer</SubType></Page>
-    <Page Include="Temas\Repair.xaml"><Generator>MSBuild:Compile</Generator><SubType>Designer</SubType></Page>
-    <Compile Include="App.xaml.cs"><DependentUpon>App.xaml</DependentUpon></Compile>
-    <Compile Include="MainWindow.xaml.cs"><DependentUpon>MainWindow.xaml</DependentUpon></Compile>
-    <Compile Include="Presentacion\ClienteFila.cs" /><Compile Include="Presentacion\DisposicionAdaptable.cs" />
-    <Compile Include="Integracion\IModuloEquipos.cs" /><Compile Include="Demostracion\ClienteMemoriaRepositorio.cs" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="EquiposWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Presentacion\EquiposControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Temas\Repair.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Demostracion\EquipoMemoriaRepositorio.cs" />
+    <Compile Include="EquiposWindow.xaml.cs">
+      <DependentUpon>EquiposWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Integracion\ModuloEquipos.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\ClienteFila.cs" />
+    <Compile Include="Presentacion\DisposicionAdaptable.cs" />
+    <Compile Include="Integracion\IModuloEquipos.cs" />
+    <Compile Include="Demostracion\ClienteMemoriaRepositorio.cs" />
+    <Compile Include="Presentacion\EquiposControl.xaml.cs">
+      <DependentUpon>EquiposControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="App.config" /><None Include="app.manifest" />
-    <ProjectReference Include="..\Repair.Core\Repair.Core.csproj"><Project>{EE2C0B13-E058-4DDD-8396-C2E5C21F0801}</Project><Name>Repair.Core</Name></ProjectReference>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+    <ProjectReference Include="..\Repair.Core\Repair.Core.csproj">
+      <Project>{EE2C0B13-E058-4DDD-8396-C2E5C21F0801}</Project>
+      <Name>Repair.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

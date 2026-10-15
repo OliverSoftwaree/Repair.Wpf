@@ -1,4 +1,4 @@
-<Window x:Class="Repair.Wpf.MainWindow"
+<Window x:Class="Repair.Wpf.MainWindow" xmlns:presentacion="clr-namespace:Repair.Wpf.Presentacion"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
@@ -177,15 +177,14 @@
             </Grid>
 
             <Grid x:Name="DevicesPage" Visibility="Collapsed">
-              <Border Style="{StaticResource Card}" MaxWidth="700" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="38">
-                <StackPanel>
-                  <Border Width="66" Height="66" CornerRadius="20" Background="#FFF0E3" HorizontalAlignment="Left" Margin="0,0,0,24"><Path Data="{StaticResource IconDevices}" Style="{StaticResource IconPath}" Stroke="#AB6C3F" Width="30" Height="30" /></Border>
-                  <TextBlock Text="El próximo paso:&#10;darle un lugar a cada equipo." FontSize="30" FontWeight="SemiBold" LineHeight="38" />
-                  <TextBlock Text="Este espacio conectará los equipos con sus clientes y reunirá sus datos de recepción." Style="{StaticResource MutedText}" Margin="0,16,0,22" />
-                  <Border Background="#F4F7F8" CornerRadius="9" Padding="14"><TextBlock Text="Próximo avance · El módulo de equipos todavía no está disponible." FontSize="12" Foreground="#6A818D" /></Border>
-                  <Button Content="Volver a clientes →" Style="{StaticResource PrimaryButton}" Click="NavClients_Click" HorizontalAlignment="Left" Margin="0,24,0,0" />
-                </StackPanel>
-              </Border>
+                <!-- Integración del control de equipos en la página principal -->
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,12,6">
+                        <Button x:Name="OpenEquiposWindowButton" Content="Abrir en ventana" Style="{StaticResource QuietButton}" Click="OpenEquiposWindow_Click" Visibility="Collapsed" />
+                    </StackPanel>
+                    <presentacion:EquiposControl x:Name="EquiposControl" Grid.Row="1" />
+                </Grid>
             </Grid>
           </Grid>
         </Grid>

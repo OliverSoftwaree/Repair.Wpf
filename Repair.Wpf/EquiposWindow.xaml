@@ -1,0 +1,57 @@
+<Window x:Class="Repair.Wpf.EquiposWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Equipos" Height="600" Width="900" WindowStartupLocation="CenterOwner" ResizeMode="CanResize" MinWidth="760" MinHeight="480">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,12">
+                <TextBlock Text="Registro de equipo" FontSize="18" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Cliente:" Width="80" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ClienteSelector" Width="400" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Marca:" Width="80" VerticalAlignment="Center" />
+                    <TextBox x:Name="MarcaInput" Width="400" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Modelo:" Width="80" VerticalAlignment="Center" />
+                    <TextBox x:Name="ModeloInput" Width="400" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Serie:" Width="80" VerticalAlignment="Center" />
+                    <TextBox x:Name="SerieInput" Width="400" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Accesorios:" Width="80" VerticalAlignment="Center" />
+                    <TextBox x:Name="AccesoriosInput" Width="400" />
+                </StackPanel>
+                <TextBlock Text="Condición:" Margin="0,8,0,0" />
+                <TextBox x:Name="CondicionInput" Height="80" TextWrapping="Wrap" AcceptsReturn="True" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                    <Button x:Name="GuardarButton" Width="100" Content="Guardar" Margin="0,0,8,0" Click="GuardarButton_Click" />
+                    <Button Width="100" Content="Cerrar" Click="CerrarButton_Click" />
+                </StackPanel>
+                <TextBlock x:Name="MensajeText" Foreground="Red" Margin="0,8,0,0" Visibility="Collapsed" TextWrapping="Wrap" />
+            </StackPanel>
+            <ListView x:Name="Listado" Margin="-10,437,10,-7" Grid.RowSpan="2">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" Width="60" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="ClienteId" Width="80" DisplayMemberBinding="{Binding ClienteId}" />
+                        <GridViewColumn Header="Marca" Width="120" DisplayMemberBinding="{Binding Marca}" />
+                        <GridViewColumn Header="Modelo" Width="120" DisplayMemberBinding="{Binding Modelo}" />
+                        <GridViewColumn Header="Serie" Width="120" DisplayMemberBinding="{Binding Serie}" />
+                        <GridViewColumn Header="Accesorios" Width="150" DisplayMemberBinding="{Binding Accesorios}" />
+                        <GridViewColumn Header="Condición" Width="250" DisplayMemberBinding="{Binding Condicion}" />
+                        <GridViewColumn Header="CreadoUtc" Width="150" DisplayMemberBinding="{Binding CreadoUtc}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </ScrollViewer>
+</Window>

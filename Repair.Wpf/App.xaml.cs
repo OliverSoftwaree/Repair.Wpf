@@ -26,8 +26,11 @@ namespace Repair.Wpf
                 }
                 repositorio = new ClienteSqlRepositorio(configuracion.ConnectionString);
             }
-            // Oliver podrá registrar aquí su implementación WPF de IModuloEquipos.
-            MainWindow = new MainWindow(new ClienteServicio(repositorio), demo, null);
+            // Registrar la implementación WPF de IModuloEquipos.
+            Repair.Wpf.Integracion.IModuloEquipos modulo;
+            if (demo) modulo = new Repair.Wpf.Integracion.ModuloEquipos(true, null);
+            else modulo = new Repair.Wpf.Integracion.ModuloEquipos(false, ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString);
+            MainWindow = new MainWindow(new ClienteServicio(repositorio), demo, modulo);
             MainWindow.Show();
         }
     }

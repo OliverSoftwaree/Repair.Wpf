@@ -1,0 +1,69 @@
+<UserControl x:Class="Repair.Wpf.Presentacion.EquiposControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="760">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Margin="0,0,0,12">
+                <TextBlock Text="Registro de equipo" FontSize="18" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Cliente:" Width="100" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ClienteSelector" Width="420" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Marca:" Width="100" VerticalAlignment="Center" />
+                    <TextBox x:Name="MarcaInput" Width="420" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Modelo:" Width="100" VerticalAlignment="Center" />
+                    <TextBox x:Name="ModeloInput" Width="420" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Serie:" Width="100" VerticalAlignment="Center" />
+                    <TextBox x:Name="SerieInput" Width="420" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Accesorios:" Width="100" VerticalAlignment="Center" />
+                    <TextBox x:Name="AccesoriosInput" Width="420" />
+                </StackPanel>
+                <TextBlock Text="Condición:" Margin="0,8,0,0" />
+                <TextBox x:Name="CondicionInput" Height="80" TextWrapping="Wrap" AcceptsReturn="True" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                    <Button x:Name="GuardarButton" Width="80" Content="Guardar" Click="GuardarButton_Click" RenderTransformOrigin="0.5,0.5" >
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="1.072"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
+                    </Button>
+                    <Button x:Name="ActualizarButton" Width="80" Content="Actualizar" Margin="0,0,8,0" Click="ActualizarButton_Click" IsEnabled="False" />
+                    <Button x:Name="EliminarButton" Width="80" Content="Eliminar" Click="EliminarButton_Click" IsEnabled="False" />
+                </StackPanel>
+                <TextBlock x:Name="MensajeText" Foreground="Red" Margin="0,8,0,0" Visibility="Collapsed" TextWrapping="Wrap" />
+            </StackPanel>
+            <ListView x:Name="Listado" Grid.Row="1" MinHeight="160">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" Width="50" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="ClienteId" Width="70" DisplayMemberBinding="{Binding ClienteId}" />
+                        <GridViewColumn Header="Marca" Width="120" DisplayMemberBinding="{Binding Marca}" />
+                        <GridViewColumn Header="Modelo" Width="120" DisplayMemberBinding="{Binding Modelo}" />
+                        <GridViewColumn Header="Serie" Width="120" DisplayMemberBinding="{Binding Serie}" />
+                        <GridViewColumn Header="Accesorios" Width="150" DisplayMemberBinding="{Binding Accesorios}" />
+                        <GridViewColumn Header="Condición" Width="250" DisplayMemberBinding="{Binding Condicion}" />
+                        <GridViewColumn Header="CreadoUtc" Width="150" DisplayMemberBinding="{Binding CreadoUtc}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

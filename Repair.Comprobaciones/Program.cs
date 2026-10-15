@@ -20,6 +20,7 @@ namespace Repair.Comprobaciones
             if (args.Length == 1 && args[0] == "--sql-probe") return ProbarSqlAsync().GetAwaiter().GetResult();
             EjecutarAsync().GetAwaiter().GetResult();
             InterfazLogicaAsync().GetAwaiter().GetResult();
+            EjecutarEquiposAsync().GetAwaiter().GetResult();
             Console.WriteLine("RESULTADO: " + correctas + " correctas; " + fallidas + " fallidas. Lógica y reglas de presentación; no acredita renderizado ni persistencia SQL.");
             return fallidas == 0 ? 0 : 1;
         }
@@ -64,6 +65,46 @@ namespace Repair.Comprobaciones
         }
         private static Cliente Valido()
         { return new Cliente { Nombre = "  Cliente de prueba  ", Telefono = "  809-555-0100  ", Correo = "  prueba@example.test  ", Notas = "  Equipo académico  " }; }
+
+        // ---------- Pruebas para EquipoServicio ----------
+        private sealed class RepoEquipoPrueba : Repair.Core.Datos.IEquipoRepositorio
+        {
+            internal int Altas { get; private set; }
+            public Task<int> AgregarAsync(Repair.Core.Modelos.Equipo equipo)
+            {
+                Altas++; return Task.FromResult(Altas);
+            }
+            public Task<System.Collections.Generic.IReadOnlyList<Repair.Core.Modelos.Equipo>> BuscarAsync(string texto) => Task.FromResult((System.Collections.Generic.IReadOnlyList<Repair.Core.Modelos.Equipo>)new System.Collections.Generic.List<Repair.Core.Modelos.Equipo>());
+            public Task<Repair.Core.Modelos.Equipo> ObtenerAsync(int id) => Task.FromResult<Repair.Core.Modelos.Equipo>(null);
+            public Task ActualizarAsync(Repair.Core.Modelos.Equipo equipo) => Task.CompletedTask;
+            public Task EliminarAsync(int id) => Task.CompletedTask;
+        }
+
+        private static async Task RechazaEquipo(string nombre, System.Action<Repair.Core.Modelos.Equipo> cambio, string campo)
+        {
+            await Caso(nombre, async () =>
+            {
+                var repo = new RepoEquipoPrueba(); var servicio = new Repair.Core.Logica.EquipoServicio(repo); var e = new Repair.Core.Modelos.Equipo { ClienteId = 1, Marca = "M", Modelo = "Mod", Condicion = "Bueno" };
+                cambio(e);
+                try { await servicio.RegistrarAsync(e); throw new Exception("Se aceptó una entrada inválida."); }
+                catch (Repair.Core.Logica.ValidacionException ex) { Exigir(ex.Errores.ContainsKey(campo), "No señaló el campo."); }
+                Exigir(repo.Altas == 0, "La validación alcanzó el repositorio.");
+            });
+        }
+
+        private static async Task EjecutarEquiposAsync()
+        {
+            await Caso("Equipos: alta válida y delega en repo", async () =>
+            {
+                var repo = new RepoEquipoPrueba(); var servicio = new Repair.Core.Logica.EquipoServicio(repo);
+                var e = new Repair.Core.Modelos.Equipo { ClienteId = 1, Marca = "MarcaX", Modelo = "ModeloY", Condicion = "Funciona correctamente" };
+                int id = await servicio.RegistrarAsync(e); Exigir(id == 1, "ID inválido o no delegó"); Exigir(repo.Altas == 1, "No delegó en el repositorio");
+            });
+            await RechazaEquipo("ClienteId inválido", c => c.ClienteId = 0, "ClienteId");
+            await RechazaEquipo("Marca vacía", c => c.Marca = "", "Marca");
+            await RechazaEquipo("Modelo vacío", c => c.Modelo = "", "Modelo");
+            await RechazaEquipo("Condición corta", c => c.Condicion = "Ok", "Condicion");
+        }
 
         private static async Task Caso(string nombre, Func<Task> accion)
         {
