@@ -19,7 +19,6 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <StartArguments>--demo</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <Optimize>true</Optimize>
@@ -46,6 +45,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Presentacion\DiagnosticoControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Presentacion\EquiposControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -57,6 +59,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Demostracion\EquipoMemoriaRepositorio.cs" />
+    <Compile Include="Demostracion\OrdenMemoriaRepositorio.cs" />
     <Compile Include="EquiposWindow.xaml.cs">
       <DependentUpon>EquiposWindow.xaml</DependentUpon>
     </Compile>
@@ -65,6 +68,9 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentacion\ClienteFila.cs" />
+    <Compile Include="Presentacion\DiagnosticoControl.xaml.cs">
+      <DependentUpon>DiagnosticoControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\DisposicionAdaptable.cs" />
     <Compile Include="Integracion\IModuloEquipos.cs" />
     <Compile Include="Demostracion\ClienteMemoriaRepositorio.cs" />

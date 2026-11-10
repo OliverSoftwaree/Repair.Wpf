@@ -30,7 +30,7 @@ namespace Repair.Core.Logica
             return repositorio.ObtenerAsync(id);
         }
 
-        public Task<int> RegistrarAsync(Equipo entrada)
+        public async Task<int> RegistrarAsync(Equipo entrada)
         {
             if (entrada == null) throw new ArgumentNullException(nameof(entrada));
             var equipo = new Equipo
@@ -56,14 +56,14 @@ namespace Repair.Core.Logica
             if (errores.Count > 0) throw new ValidacionException(errores);
 
             // Prevención básica de duplicados: mismo cliente, misma marca, modelo y serie.
-            var existentes = repositorio.BuscarAsync("").GetAwaiter().GetResult();
+            var existentes = await repositorio.BuscarAsync("");
             bool duplicado = existentes.Any(e => e.ClienteId == equipo.ClienteId &&
                 string.Equals(e.Marca, equipo.Marca, StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(e.Modelo, equipo.Modelo, StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(e.Serie ?? string.Empty, equipo.Serie ?? string.Empty, StringComparison.OrdinalIgnoreCase));
             if (duplicado) throw new ValidacionException(new Dictionary<string, string> { { "Duplicado", "Ya existe un equipo con la misma marca, modelo y serie para este cliente." } });
 
-            return repositorio.AgregarAsync(equipo);
+            return await repositorio.AgregarAsync(equipo);
         }
 
         public async Task ActualizarAsync(Equipo entrada)

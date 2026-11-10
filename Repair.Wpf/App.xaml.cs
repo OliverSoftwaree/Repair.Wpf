@@ -13,7 +13,9 @@ namespace Repair.Wpf
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            bool demo = e.Args.Contains("--demo") || string.Equals(ConfigurationManager.AppSettings["Modo"], "Demostracion", StringComparison.OrdinalIgnoreCase);
+            string modo = ConfigurationManager.AppSettings["Modo"] ?? "";
+            bool demo = string.Equals(modo, "Demostracion", StringComparison.OrdinalIgnoreCase)
+                || (string.IsNullOrWhiteSpace(modo) && e.Args.Contains("--demo"));
             IClienteRepositorio repositorio;
             if (demo) repositorio = new ClienteMemoriaRepositorio();
             else
@@ -32,6 +34,6 @@ namespace Repair.Wpf
             else modulo = new Repair.Wpf.Integracion.ModuloEquipos(false, ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString);
             MainWindow = new MainWindow(new ClienteServicio(repositorio), demo, modulo);
             MainWindow.Show();
-        }
+        } 
     }
 }

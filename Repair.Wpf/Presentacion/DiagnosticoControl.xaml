@@ -1,0 +1,68 @@
+<UserControl x:Class="Repair.Wpf.Presentacion.DiagnosticoControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="760">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,12">
+                <TextBlock Text="Diagnóstico técnico" FontSize="18" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock Text="Cliente:" Width="70" VerticalAlignment="Center" />
+                    <ComboBox x:Name="ClienteSelector" Width="220" SelectionChanged="ClienteSelector_SelectionChanged" />
+                    <TextBlock Text="Orden:" Width="60" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <ComboBox x:Name="OrdenSelector" Width="140" SelectionChanged="OrdenSelector_SelectionChanged" />
+                    <TextBlock Text="ID:" Width="30" Margin="12,0,0,0" VerticalAlignment="Center" />
+                    <TextBox x:Name="OrdenInput" Width="110" />
+                    <Button x:Name="BuscarOrdenButton" Width="110" Margin="10,0,0,0" Content="Buscar" Click="BuscarOrdenButton_Click" />
+                </StackPanel>
+            </StackPanel>
+
+            <Border Grid.Row="1" BorderBrush="#E1E6E8" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock x:Name="OrdenInfoText" Text="Busca una orden por ID para comenzar el diagnóstico." Foreground="#5B6E76" />
+                    <TextBlock x:Name="ClienteInfoText" Text="Cliente: --" Margin="0,6,0,0" Foreground="#425862" FontWeight="SemiBold" />
+                    <TextBlock x:Name="EstadoText" Text="Estado: --" Margin="0,8,0,0" FontWeight="SemiBold" />
+                </StackPanel>
+            </Border>
+
+            <StackPanel Grid.Row="2" >
+                <TextBlock Text="Diagnóstico técnico" Margin="0,0,0,6" FontWeight="SemiBold" />
+                <TextBox x:Name="DiagnosticoInput" Height="120" TextWrapping="Wrap" AcceptsReturn="True" />
+
+                <TextBlock Text="Hallazgos / piezas / observaciones" Margin="0,12,0,6" FontWeight="SemiBold" />
+                <TextBox x:Name="ObservacionesInput" Height="90" TextWrapping="Wrap" AcceptsReturn="True" />
+
+                <TextBlock Text="Severidad" Margin="0,12,0,6" FontWeight="SemiBold" />
+                <ComboBox x:Name="SeveridadCombo" Width="220" HorizontalAlignment="Left" SelectedIndex="1">
+                    <ComboBoxItem Content="Leve" />
+                    <ComboBoxItem Content="Media" />
+                    <ComboBoxItem Content="Grave" />
+                    <ComboBoxItem Content="Crítica" />
+                </ComboBox>
+
+                <TextBlock Text="Acción recomendada" Margin="0,12,0,6" FontWeight="SemiBold" />
+                <ComboBox x:Name="AccionCombo" Width="260" HorizontalAlignment="Left" SelectedIndex="0">
+                    <ComboBoxItem Content="Revisar" />
+                    <ComboBoxItem Content="Cambiar pieza" />
+                    <ComboBoxItem Content="Enviar a fábrica" />
+                    <ComboBoxItem Content="No reparable" />
+                    <ComboBoxItem Content="Reparado" />
+                </ComboBox>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                    <Button x:Name="GuardarDiagnosticoButton" Width="180" Content="Guardar diagnóstico" Click="GuardarDiagnosticoButton_Click" />
+                </StackPanel>
+
+                <TextBlock x:Name="MensajeText" Margin="0,12,0,0" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed" />
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

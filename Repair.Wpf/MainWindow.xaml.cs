@@ -21,6 +21,7 @@ namespace Repair.Wpf
     public partial class MainWindow : Window
     {
         private readonly ClienteServicio servicio;
+        private readonly OrdenServicio ordenServicio;
         private readonly IModuloEquipos equipos;
         private readonly bool demostracion;
         private readonly bool? animacionesConfiguradas;
@@ -54,8 +55,21 @@ namespace Repair.Wpf
             this.demostracion = demostracion;
             animacionesConfiguradas = animaciones;
             this.equipos = equipos;
-            DemoBanner.Visibility = demostracion ? Visibility.Visible : Visibility.Collapsed;
-            if (demostracion) { ConnectionText.Text = "Datos de muestra"; ConnectionDot.Fill = Brush("#C58240"); }
+            if (demostracion)
+            {
+                this.ordenServicio = new OrdenServicio(new Repair.Wpf.Demostracion.OrdenMemoriaRepositorio());
+                DemoBanner.Visibility = Visibility.Visible;
+                ConnectionText.Text = "Datos de muestra";
+                ConnectionDot.Fill = Brush("#C58240");
+            }
+            else
+            {
+                var cadena = System.Configuration.ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString;
+                this.ordenServicio = new OrdenServicio(new Repair.Core.Datos.OrdenSqlRepositorio(cadena));
+                DemoBanner.Visibility = Visibility.Collapsed;
+                ConnectionText.Text = "SQL Server conectado";
+                ConnectionDot.Fill = Brush("#629582");
+            }
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -70,6 +84,7 @@ namespace Repair.Wpf
                 else repo = new EquipoSqlRepositorio(System.Configuration.ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString);
                 var servicioEquipos = new EquipoServicio(repo);
                 EquiposControl.Initialize(servicioEquipos, servicio);
+                DiagnosticoControl.Initialize(ordenServicio, servicio);
                 // Si hay un módulo externo disponible, mostrar botón para abrir la ventana también.
                 OpenEquiposWindowButton.Visibility = equipos != null ? Visibility.Visible : Visibility.Collapsed;
             }
@@ -81,9 +96,11 @@ namespace Repair.Wpf
             HomePage.Visibility = pagina == "Inicio" ? Visibility.Visible : Visibility.Collapsed;
             ClientsPage.Visibility = pagina == "Clientes" ? Visibility.Visible : Visibility.Collapsed;
             DevicesPage.Visibility = pagina == "Equipos" ? Visibility.Visible : Visibility.Collapsed;
+            DiagnosticoPage.Visibility = pagina == "Diagnostico" ? Visibility.Visible : Visibility.Collapsed;
             NavHome.Tag = pagina == "Inicio" ? "Active" : null;
             NavClients.Tag = pagina == "Clientes" ? "Active" : null;
             NavDevices.Tag = pagina == "Equipos" ? "Active" : null;
+            NavDiagnostico.Tag = pagina == "Diagnostico" ? "Active" : null;
             Breadcrumb.Text = pagina == "Inicio" ? "VISTA GENERAL" : pagina.ToUpperInvariant();
             if (animar) AnimatePage();
         }
@@ -171,6 +188,11 @@ namespace Repair.Wpf
         {
             if (panelAbierto || ocupado) return;
             ShowPage("Equipos");
+        }
+        private void NavDiagnostico_Click(object sender, RoutedEventArgs e)
+        {
+            if (panelAbierto || ocupado) return;
+            ShowPage("Diagnostico");
         }
 
         private async void Search_Click(object sender, RoutedEventArgs e) { await LoadClientsAsync(); }

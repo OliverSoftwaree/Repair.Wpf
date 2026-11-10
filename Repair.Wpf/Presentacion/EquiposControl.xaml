@@ -50,7 +50,11 @@
                 </StackPanel>
                 <TextBlock x:Name="MensajeText" Foreground="Red" Margin="0,8,0,0" Visibility="Collapsed" TextWrapping="Wrap" />
             </StackPanel>
-            <ListView x:Name="Listado" Grid.Row="1" MinHeight="160">
+            <StackPanel Grid.Row="1" Margin="0,0,0,8">
+                <TextBlock Text="IDs almacenados" FontWeight="SemiBold" Margin="0,0,0,6" />
+                <TextBlock x:Name="IdsRegistradosText" Text="Sin registros" Foreground="#5B6E76" TextWrapping="Wrap" />
+            </StackPanel>
+            <ListView x:Name="Listado" Grid.Row="2" MinHeight="160">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Id" Width="50" DisplayMemberBinding="{Binding Id}" />

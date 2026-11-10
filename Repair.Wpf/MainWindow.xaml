@@ -49,6 +49,9 @@
               <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="NavDevices_Click" ToolTip="Equipos · próximo avance" AutomationProperties.Name="Equipos, próximo avance">
                 <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconDevices}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavDevicesText" Text="Equipos" Margin="14,0,0,0" /></StackPanel>
               </Button>
+              <Button x:Name="NavDiagnostico" Style="{StaticResource NavButton}" Click="NavDiagnostico_Click" ToolTip="Diagnóstico técnico" AutomationProperties.Name="Diagnóstico técnico">
+                <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconSearch}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavDiagnosticoText" Text="Diagnóstico" Margin="14,0,0,0" /></StackPanel>
+              </Button>
               <Border x:Name="NextModuleLabel" Background="#25343A" CornerRadius="7" Margin="14,9,14,0" Padding="9,6"><TextBlock Text="Equipos: próximo avance" FontSize="10" Foreground="#9DB0B9" TextAlignment="Center" /></Border>
             </StackPanel>
             <Border Grid.Row="3" BorderBrush="#3A484D" BorderThickness="0,1,0,0" Padding="4,18,4,0">
@@ -185,6 +188,14 @@
                     </StackPanel>
                     <presentacion:EquiposControl x:Name="EquiposControl" Grid.Row="1" />
                 </Grid>
+            </Grid>
+
+            <Grid x:Name="DiagnosticoPage" Visibility="Collapsed">
+                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,12,6">
+                    <TextBlock Text="Diagnóstico técnico" Foreground="#7E8E98" FontSize="12" FontWeight="SemiBold" />
+                </StackPanel>
+                <presentacion:DiagnosticoControl x:Name="DiagnosticoControl" Grid.Row="1" />
             </Grid>
           </Grid>
         </Grid>

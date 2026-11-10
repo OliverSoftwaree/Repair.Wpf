@@ -66,6 +66,7 @@ namespace Repair.Wpf.Presentacion
                 Listado.ItemsSource = datos;
                 if (datos == null || datos.Count == 0)
                 {
+                    IdsRegistradosText.Text = "Sin registros almacenados.";
                     MensajeText.Text = "No se encontraron equipos.";
                     MensajeText.Foreground = System.Windows.Media.Brushes.DarkGray;
                     MensajeText.Visibility = Visibility.Visible;
@@ -73,6 +74,8 @@ namespace Repair.Wpf.Presentacion
                 }
                 else
                 {
+                    var ids = string.Join(", ", datos.Select(d => d.Id));
+                    IdsRegistradosText.Text = "IDs registrados: " + ids + "";
                     MensajeText.Visibility = Visibility.Collapsed;
                     ActualizarButton.IsEnabled = false; EliminarButton.IsEnabled = false;
                     // Conectar selección para habilitar Actualizar/Eliminar cuando el usuario seleccione un ítem.
@@ -82,6 +85,7 @@ namespace Repair.Wpf.Presentacion
             }
             catch (System.Exception ex)
             {
+                IdsRegistradosText.Text = "No se pudieron cargar los IDs.";
                 MensajeText.Text = "Error al consultar equipos: " + ex.Message;
                 MensajeText.Foreground = System.Windows.Media.Brushes.Red;
                 MensajeText.Visibility = Visibility.Visible;
@@ -131,16 +135,17 @@ namespace Repair.Wpf.Presentacion
             }
             catch (Repair.Core.Datos.AccesoDatosException aex)
             {
-                MensajeText.Text = aex.Message + " (consulta el listado y reintenta).";
+                var detalle = aex.InnerException != null ? aex.InnerException.Message : aex.Message;
+                MensajeText.Text = detalle + " (consulta el listado y reintenta).";
                 MensajeText.Foreground = System.Windows.Media.Brushes.Red;
                 MensajeText.Visibility = Visibility.Visible;
             }
             catch (System.Exception ex)
             {
-                MensajeText.Text = "No se pudo guardar: " + ex.Message;
+                MensajeText.Text = "No se pudo guardar: " + (ex.InnerException != null ? ex.InnerException.Message : ex.Message);
                 MensajeText.Foreground = System.Windows.Media.Brushes.Red;
                 MensajeText.Visibility = Visibility.Visible;
-            }
+            } 
         }
 
         private void Listado_SelectionChanged(object sender, SelectionChangedEventArgs e)
