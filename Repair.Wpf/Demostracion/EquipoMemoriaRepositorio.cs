@@ -18,7 +18,7 @@ namespace Repair.Wpf.Demostracion
         }
         private void Semilla(int clienteId, string marca, string modelo, string serie, string accesorios, string condicion)
         {
-            filas.Add(new Equipo { Id = filas.Count + 1, ClienteId = clienteId, Marca = marca, Modelo = modelo, Serie = serie, Accesorios = accesorios, Condicion = condicion, CreadoUtc = DateTime.UtcNow });
+            filas.Add(new Equipo { Id = filas.Count + 1, ClienteId = clienteId, Tipo = TiposEquipo.SinEspecificar, Marca = marca, Modelo = modelo, Serie = serie, Accesorios = accesorios, Condicion = condicion, CreadoUtc = DateTime.UtcNow });
         }
         public Task<int> AgregarAsync(Equipo equipo)
         {
@@ -29,7 +29,7 @@ namespace Repair.Wpf.Demostracion
         {
             texto = (texto ?? "").Trim();
             return Task.FromResult((IReadOnlyList<Equipo>)filas.Where(e => texto.Length == 0 || e.Id.ToString() == texto || e.ClienteId.ToString() == texto ||
-                Contiene(e.Marca, texto) || Contiene(e.Modelo, texto) || Contiene(e.Serie, texto) || Contiene(e.Accesorios, texto) || Contiene(e.Condicion, texto))
+                Contiene(e.Tipo, texto) || Contiene(e.Marca, texto) || Contiene(e.Modelo, texto) || Contiene(e.Serie, texto) || Contiene(e.Accesorios, texto) || Contiene(e.Condicion, texto))
                 .OrderByDescending(e => e.Id).Select(Copiar).ToList());
         }
         public Task<Equipo> ObtenerAsync(int id) { return Task.FromResult(Copiar(filas.FirstOrDefault(e => e.Id == id))); }
@@ -39,6 +39,7 @@ namespace Repair.Wpf.Demostracion
             if (existente != null)
             {
                 existente.ClienteId = equipo.ClienteId;
+                existente.Tipo = equipo.Tipo;
                 existente.Marca = equipo.Marca;
                 existente.Modelo = equipo.Modelo;
                 existente.Serie = equipo.Serie;
@@ -56,7 +57,7 @@ namespace Repair.Wpf.Demostracion
         private static Equipo Copiar(Equipo e)
         {
             if (e == null) return null;
-            return new Equipo { Id = e.Id, ClienteId = e.ClienteId, Marca = e.Marca, Modelo = e.Modelo, Serie = e.Serie, Accesorios = e.Accesorios, Condicion = e.Condicion, CreadoUtc = e.CreadoUtc };
+            return new Equipo { Id = e.Id, ClienteId = e.ClienteId, Tipo = e.Tipo ?? TiposEquipo.SinEspecificar, Marca = e.Marca, Modelo = e.Modelo, Serie = e.Serie, Accesorios = e.Accesorios, Condicion = e.Condicion, CreadoUtc = e.CreadoUtc };
         }
     }
 }

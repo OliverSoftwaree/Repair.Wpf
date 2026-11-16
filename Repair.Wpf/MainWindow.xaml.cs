@@ -419,7 +419,7 @@ namespace Repair.Wpf
         private void Close_Click(object sender, RoutedEventArgs e) { Close(); }
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (ocupado || panelEnTransicion) { e.Cancel = true; ShowToast("Espera a que termine la operación antes de cerrar.", false); }
+            if (ocupado || panelEnTransicion || (EquiposControl != null && EquiposControl.OperacionEnCurso)) { e.Cancel = true; ShowToast("Espera a que termine la operación antes de cerrar.", false); }
             else toastTimer.Stop();
         }
     }

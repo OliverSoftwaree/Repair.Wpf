@@ -6,3 +6,5 @@
 *.mdf
 *.ldf
 *.bak
+SqlServidor.local.txt
+*.local.config

@@ -30,12 +30,13 @@ namespace Repair.Core.Logica
             return repositorio.ObtenerAsync(id);
         }
 
-        public Task<int> RegistrarAsync(Equipo entrada)
+        public async Task<int> RegistrarAsync(Equipo entrada)
         {
             if (entrada == null) throw new ArgumentNullException(nameof(entrada));
             var equipo = new Equipo
             {
                 ClienteId = entrada.ClienteId,
+                Tipo = TiposEquipo.Normalizar(entrada.Tipo),
                 Marca = (entrada.Marca ?? "").Trim(),
                 Modelo = (entrada.Modelo ?? "").Trim(),
                 Serie = (entrada.Serie ?? "").Trim(),
@@ -43,6 +44,7 @@ namespace Repair.Core.Logica
                 Condicion = (entrada.Condicion ?? "").Trim()
             };
             var errores = new Dictionary<string, string>();
+            if (equipo.Tipo == null) errores["Tipo"] = "Selecciona un tipo de equipo de la lista.";
             if (equipo.ClienteId <= 0) errores["ClienteId"] = "Selecciona un cliente válido.";
             if (equipo.Marca.Length < 1 || equipo.Marca.Length > 60 || equipo.Marca.Any(char.IsControl))
                 errores["Marca"] = "Escribe la marca (1-60 caracteres, sin saltos de línea).";
@@ -56,14 +58,14 @@ namespace Repair.Core.Logica
             if (errores.Count > 0) throw new ValidacionException(errores);
 
             // Prevención básica de duplicados: mismo cliente, misma marca, modelo y serie.
-            var existentes = repositorio.BuscarAsync("").GetAwaiter().GetResult();
+            var existentes = await repositorio.BuscarAsync("");
             bool duplicado = existentes.Any(e => e.ClienteId == equipo.ClienteId &&
                 string.Equals(e.Marca, equipo.Marca, StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(e.Modelo, equipo.Modelo, StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(e.Serie ?? string.Empty, equipo.Serie ?? string.Empty, StringComparison.OrdinalIgnoreCase));
             if (duplicado) throw new ValidacionException(new Dictionary<string, string> { { "Duplicado", "Ya existe un equipo con la misma marca, modelo y serie para este cliente." } });
 
-            return repositorio.AgregarAsync(equipo);
+            return await repositorio.AgregarAsync(equipo);
         }
 
         public async Task ActualizarAsync(Equipo entrada)
@@ -74,6 +76,7 @@ namespace Repair.Core.Logica
             {
                 Id = entrada.Id,
                 ClienteId = entrada.ClienteId,
+                Tipo = TiposEquipo.Normalizar(entrada.Tipo),
                 Marca = (entrada.Marca ?? "").Trim(),
                 Modelo = (entrada.Modelo ?? "").Trim(),
                 Serie = (entrada.Serie ?? "").Trim(),
@@ -81,6 +84,7 @@ namespace Repair.Core.Logica
                 Condicion = (entrada.Condicion ?? "").Trim()
             };
             var errores = new Dictionary<string, string>();
+            if (equipo.Tipo == null) errores["Tipo"] = "Selecciona un tipo de equipo de la lista.";
             if (equipo.ClienteId <= 0) errores["ClienteId"] = "Selecciona un cliente válido.";
             if (equipo.Marca.Length < 1 || equipo.Marca.Length > 60 || equipo.Marca.Any(char.IsControl))
                 errores["Marca"] = "Escribe la marca (1-60 caracteres, sin saltos de línea).";

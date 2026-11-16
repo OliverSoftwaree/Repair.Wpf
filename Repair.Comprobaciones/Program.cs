@@ -84,7 +84,7 @@ namespace Repair.Comprobaciones
         {
             await Caso(nombre, async () =>
             {
-                var repo = new RepoEquipoPrueba(); var servicio = new Repair.Core.Logica.EquipoServicio(repo); var e = new Repair.Core.Modelos.Equipo { ClienteId = 1, Marca = "M", Modelo = "Mod", Condicion = "Bueno" };
+                var repo = new RepoEquipoPrueba(); var servicio = new Repair.Core.Logica.EquipoServicio(repo); var e = new Repair.Core.Modelos.Equipo { ClienteId = 1, Tipo = "Laptop", Marca = "M", Modelo = "Mod", Condicion = "Bueno" };
                 cambio(e);
                 try { await servicio.RegistrarAsync(e); throw new Exception("Se aceptó una entrada inválida."); }
                 catch (Repair.Core.Logica.ValidacionException ex) { Exigir(ex.Errores.ContainsKey(campo), "No señaló el campo."); }
@@ -97,7 +97,7 @@ namespace Repair.Comprobaciones
             await Caso("Equipos: alta válida y delega en repo", async () =>
             {
                 var repo = new RepoEquipoPrueba(); var servicio = new Repair.Core.Logica.EquipoServicio(repo);
-                var e = new Repair.Core.Modelos.Equipo { ClienteId = 1, Marca = "MarcaX", Modelo = "ModeloY", Condicion = "Funciona correctamente" };
+                var e = new Repair.Core.Modelos.Equipo { ClienteId = 1, Tipo = "Laptop", Marca = "MarcaX", Modelo = "ModeloY", Condicion = "Funciona correctamente" };
                 int id = await servicio.RegistrarAsync(e); Exigir(id == 1, "ID inválido o no delegó"); Exigir(repo.Altas == 1, "No delegó en el repositorio");
             });
             await RechazaEquipo("ClienteId inválido", c => c.ClienteId = 0, "ClienteId");

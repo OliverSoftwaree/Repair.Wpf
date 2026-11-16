@@ -7,6 +7,7 @@ namespace Repair.Core.Integracion
     {
         public int Id { get; set; }
         public int ClienteId { get; set; }
+        public string Tipo { get; set; }        // Catálogo TiposEquipo; SQL nvarchar(60)
         public string Marca { get; set; }       // Máximo propuesto: 60
         public string Modelo { get; set; }      // 100
         public string Serie { get; set; }       // 100, opcional
