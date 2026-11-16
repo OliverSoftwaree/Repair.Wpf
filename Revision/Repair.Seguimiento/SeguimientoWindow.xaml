@@ -1,0 +1,135 @@
+<Window x:Class="Repair.Seguimiento.SeguimientoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:automation="clr-namespace:System.Windows.Automation;assembly=PresentationCore"
+        Title="Repair · Seguimiento y entrega" Width="900" Height="760"
+        MinWidth="650" MinHeight="510" WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI" FontSize="14" Foreground="#15283D"
+        UseLayoutRounding="True">
+    <Window.Resources>
+        <SolidColorBrush x:Key="TextoSecundario" Color="#50647B" />
+        <SolidColorBrush x:Key="BordeSuave" Color="#D9E2ED" />
+        <Style x:Key="Tarjeta" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource BordeSuave}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="Padding" Value="22" />
+        </Style>
+        <Style x:Key="Etiqueta" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextoSecundario}" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="18,8" />
+            <Setter Property="MinHeight" Value="40" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Superficie" CornerRadius="8" BorderBrush="Transparent" BorderThickness="2">
+                            <Border.Background><SolidColorBrush Color="#135E59" /></Border.Background>
+                            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard><Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Superficie" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#0E4945" Duration="0:0:0.14" />
+                                    </Storyboard></BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard><Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Superficie" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#135E59" Duration="0:0:0.14" />
+                                    </Storyboard></BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Superficie" Property="BorderBrush" Value="#8DE3D0" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Superficie" Property="Opacity" Value="0.55" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer Background="#EFF3F7" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,24,28,30" MaxWidth="900">
+            <Border Background="#15283D" CornerRadius="14" Padding="25,18,25,21" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Repair" Foreground="#AEE7D9" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4" />
+                    <TextBlock Text="Seguimiento y entrega" Foreground="White" FontSize="29" FontWeight="SemiBold" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Tarjeta}" Margin="0,0,0,14">
+                <StackPanel>
+                    <WrapPanel x:Name="SelectorModo" Margin="0,0,0,8">
+                        <RadioButton x:Name="ModoDemo" Content="Demostración" GroupName="Modo" IsChecked="True" Margin="0,0,24,0" Click="CambiarModo" />
+                        <RadioButton x:Name="ModoSql" Content="Consulta SQL" GroupName="Modo" Click="CambiarModo" />
+                    </WrapPanel>
+                    <TextBlock x:Name="ModoDetalle" Foreground="{StaticResource TextoSecundario}" TextWrapping="Wrap" Margin="0,0,0,15" />
+                    <Label Content="_Número de orden" Target="{Binding ElementName=NumeroOrden}" Padding="0,0,0,5" FontWeight="SemiBold" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="NumeroOrden" MaxLength="10" MinHeight="40" Padding="10,7" FontSize="16"
+                                 HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                                 PreviewKeyDown="NumeroOrden_Tecla" automation:AutomationProperties.Name="Número de orden" />
+                        <Button x:Name="BuscarOrden" Content="_Buscar orden" Grid.Column="1" Margin="10,0,0,0" Click="BuscarOrden_Click" />
+                    </Grid>
+                    <TextBlock x:Name="Mensaje" Margin="0,11,0,0" TextWrapping="Wrap" Visibility="Collapsed"
+                               FontWeight="SemiBold" automation:AutomationProperties.LiveSetting="Polite" />
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="Detalle" Style="{StaticResource Tarjeta}" Visibility="Collapsed">
+                <StackPanel>
+                    <DockPanel LastChildFill="True" Margin="0,0,0,16">
+                        <Border DockPanel.Dock="Right" Background="#DCF4ED" CornerRadius="8" Padding="12,5" Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="Estado" FontWeight="SemiBold" Foreground="#164D46" />
+                        </Border>
+                        <TextBlock x:Name="OrdenTitulo" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <Grid Margin="0,0,0,14">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Cliente" Style="{StaticResource Etiqueta}" />
+                            <TextBlock x:Name="Cliente" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Equipo" Style="{StaticResource Etiqueta}" />
+                            <TextBlock x:Name="Equipo" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+                    <Border Padding="14,11" CornerRadius="8" Background="#F2F6FA" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="Diagnóstico" Style="{StaticResource Etiqueta}" />
+                            <TextBlock x:Name="Diagnostico" TextWrapping="Wrap" />
+                            <StackPanel x:Name="ObservacionesBloque" Margin="0,11,0,0">
+                                <TextBlock Text="Observaciones" Style="{StaticResource Etiqueta}" />
+                                <TextBlock x:Name="Observaciones" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock x:Name="Entrega" FontWeight="SemiBold" TextWrapping="Wrap" Visibility="Collapsed" />
+                    <TextBlock x:Name="AccionDetalle" TextWrapping="Wrap" Foreground="{StaticResource TextoSecundario}" Visibility="Collapsed" />
+                    <Button x:Name="AvanzarOrden" HorizontalAlignment="Left" Click="AvanzarOrden_Click" Visibility="Collapsed" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
