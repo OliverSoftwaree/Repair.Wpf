@@ -31,11 +31,11 @@ foreach ($solucion in @(
 }
 
 $conexion = New-Object System.Data.SqlClient.SqlConnectionStringBuilder
-$conexion.DataSource = $Servidor
-$conexion.InitialCatalog = 'RepairSeguimientoDesarrollo_20261115'
-$conexion.IntegratedSecurity = $true
-$conexion.ConnectTimeout = 5
-$conexion.ApplicationName = 'Repair.Revision'
+$conexion['Data Source'] = $Servidor
+$conexion['Initial Catalog'] = 'RepairSeguimientoDesarrollo_20261115'
+$conexion['Integrated Security'] = $true
+$conexion['Connect Timeout'] = 5
+$conexion['Application Name'] = 'Repair.Revision'
 
 function Copiar-Setup($origen, $nombre, $carpeta, [switch] $RepairOriginal) {
     Copy-Item -LiteralPath (Join-Path $origen $nombre) -Destination $carpeta
