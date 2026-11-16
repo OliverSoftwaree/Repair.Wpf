@@ -48,6 +48,9 @@
     <Page Include="Presentacion\EquiposControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Presentacion\SeguimientoControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Temas\Repair.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -60,6 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Demostracion\EquipoMemoriaRepositorio.cs" />
+    <Compile Include="Demostracion\ConsultaSeguimientoDemo.cs" />
     <Compile Include="EquiposWindow.xaml.cs">
       <DependentUpon>EquiposWindow.xaml</DependentUpon>
     </Compile>
@@ -77,6 +81,9 @@
     <Compile Include="Demostracion\ClienteMemoriaRepositorio.cs" />
     <Compile Include="Presentacion\EquiposControl.xaml.cs">
       <DependentUpon>EquiposControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\SeguimientoControl.xaml.cs">
+      <DependentUpon>SeguimientoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="App.config" />

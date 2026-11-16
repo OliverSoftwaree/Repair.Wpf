@@ -48,12 +48,17 @@ namespace Repair.Wpf
             ShowPage("Inicio", false);
         }
 
-        public MainWindow(ClienteServicio servicio, bool demostracion, IModuloEquipos equipos, bool? animaciones = null) : this()
+        public MainWindow(ClienteServicio servicio, bool demostracion, IModuloEquipos equipos, bool? animaciones = null)
+            : this(servicio, demostracion, equipos, animaciones, null) { }
+
+        public MainWindow(ClienteServicio servicio, bool demostracion, IModuloEquipos equipos, bool? animaciones,
+            Repair.Core.Integracion.IConsultaSeguimiento consultaSeguimiento) : this()
         {
             this.servicio = servicio ?? throw new ArgumentNullException(nameof(servicio));
             this.demostracion = demostracion;
             animacionesConfiguradas = animaciones;
             this.equipos = equipos;
+            SeguimientoPage.Inicializar(consultaSeguimiento);
             DemoBanner.Visibility = demostracion ? Visibility.Visible : Visibility.Collapsed;
             if (demostracion) { ConnectionText.Text = "Datos de muestra"; ConnectionDot.Fill = Brush("#C58240"); }
         }
@@ -81,9 +86,11 @@ namespace Repair.Wpf
             HomePage.Visibility = pagina == "Inicio" ? Visibility.Visible : Visibility.Collapsed;
             ClientsPage.Visibility = pagina == "Clientes" ? Visibility.Visible : Visibility.Collapsed;
             DevicesPage.Visibility = pagina == "Equipos" ? Visibility.Visible : Visibility.Collapsed;
+            SeguimientoPage.Visibility = pagina == "Seguimiento" ? Visibility.Visible : Visibility.Collapsed;
             NavHome.Tag = pagina == "Inicio" ? "Active" : null;
             NavClients.Tag = pagina == "Clientes" ? "Active" : null;
             NavDevices.Tag = pagina == "Equipos" ? "Active" : null;
+            NavSeguimiento.Tag = pagina == "Seguimiento" ? "Active" : null;
             Breadcrumb.Text = pagina == "Inicio" ? "VISTA GENERAL" : pagina.ToUpperInvariant();
             if (animar) AnimatePage();
         }
@@ -171,6 +178,12 @@ namespace Repair.Wpf
         {
             if (panelAbierto || ocupado) return;
             ShowPage("Equipos");
+        }
+
+        private void NavSeguimiento_Click(object sender, RoutedEventArgs e)
+        {
+            if (panelAbierto || ocupado) return;
+            ShowPage("Seguimiento");
         }
 
         private async void Search_Click(object sender, RoutedEventArgs e) { await LoadClientsAsync(); }
@@ -377,9 +390,9 @@ namespace Repair.Wpf
             var d = DisposicionAdaptable.Para(ActualWidth > 0 ? ActualWidth : Width);
             SidebarColumn.Width = new GridLength(d.MenuCompacto ? 80 : 232);
             SidebarContent.Margin = new Thickness(d.MenuCompacto ? 12 : 18, 28, d.MenuCompacto ? 12 : 18, 20);
-            foreach (var item in new FrameworkElement[] { BrandText, NavHomeText, NavClientsText, NavDevicesText, TeamText, NextModuleLabel }) item.Visibility = d.MenuCompacto ? Visibility.Collapsed : Visibility.Visible;
+            foreach (var item in new FrameworkElement[] { BrandText, NavHomeText, NavClientsText, NavDevicesText, NavSeguimientoText, TeamText, NextModuleLabel }) item.Visibility = d.MenuCompacto ? Visibility.Collapsed : Visibility.Visible;
             WorkspaceLabel.Visibility = d.MenuCompacto ? Visibility.Collapsed : Visibility.Visible;
-            foreach (var boton in new[] { NavHome, NavClients, NavDevices }) boton.Padding = new Thickness(d.MenuCompacto ? 12 : 14, 12, d.MenuCompacto ? 12 : 14, 12);
+            foreach (var boton in new[] { NavHome, NavClients, NavDevices, NavSeguimiento }) boton.Padding = new Thickness(d.MenuCompacto ? 12 : 14, 12, d.MenuCompacto ? 12 : 14, 12);
             ContentArea.Margin = new Thickness(d.MenuCompacto ? 22 : 34, 24, d.MenuCompacto ? 22 : 34, 22);
             HeroArtColumn.Width = new GridLength(d.MostrarIlustracion ? 270 : 0);
             HeroArt.Visibility = d.MostrarIlustracion ? Visibility.Visible : Visibility.Collapsed;

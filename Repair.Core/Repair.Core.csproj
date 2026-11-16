@@ -28,8 +28,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datos\EquipoSqlRepositorio.cs" />
+    <Compile Include="Datos\ConsultaSeguimientoSql.cs" />
     <Compile Include="Datos\IEquipoRepositorio.cs" />
     <Compile Include="Integracion\IConsultaEquipos.cs" />
+    <Compile Include="Integracion\IConsultaSeguimiento.cs" />
     <Compile Include="Logica\EquipoServicio.cs" />
     <Compile Include="Modelos\Cliente.cs" />
     <Compile Include="Logica\ClienteServicio.cs" />
@@ -40,6 +42,7 @@
     <Compile Include="Integracion\IConsultaClientes.cs" />
     <Compile Include="Integracion\EquipoContrato.cs" />
     <Compile Include="Modelos\Equipo.cs" />
+    <Compile Include="Modelos\OrdenSeguimiento.cs" />
     <Compile Include="Modelos\TiposEquipo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

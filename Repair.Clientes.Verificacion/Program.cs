@@ -36,6 +36,7 @@ namespace Repair.Clientes.Verificacion
             if (args.Length == 0 || args[0] == "--equipos-sql" || args[0] == "--equipo-leer" || args[0] == "--asincronia")
                 return PruebasEquiposSql.Ejecutar(args, Carpeta);
             if (args.Length == 1 && args[0] == "--tipo") return PruebasTipoEquipo.Ejecutar(Carpeta);
+            if (args.Length == 1 && args[0] == "--seguimiento") return PruebasSeguimiento.Ejecutar(Carpeta);
             bool lectura = args.Length == 3 && args[0] == "--sql-leer";
             bool soloCsv = args.Length == 1 && args[0] == "--csv";
             string archivo = Path.Combine(Carpeta, lectura ? "sql-segundo-proceso.log" : soloCsv ? "csv.log" : "clientes-sql.log");

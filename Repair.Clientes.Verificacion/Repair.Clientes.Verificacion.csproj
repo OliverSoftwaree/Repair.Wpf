@@ -21,6 +21,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="PruebasTipoEquipo.cs" />
     <Compile Include="PruebasEquiposSql.cs" />
+    <Compile Include="PruebasSeguimiento.cs" />
     <None Include="..\sql\02-Equipos.sql"><Link>02-Equipos.sql</Link><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></None>
     <None Include="..\sql\04-Equipos-Tipo.sql"><Link>04-Equipos-Tipo.sql</Link><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></None>
     <None Include="..\sql\03-Clientes-Desarrollo.sql"><Link>03-Clientes-Desarrollo.sql</Link><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></None>
