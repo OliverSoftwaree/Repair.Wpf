@@ -10,7 +10,7 @@ namespace Repair.Core.Datos
     public sealed class EquipoSqlRepositorio : IEquipoRepositorio
     {
         private readonly string cadena;
-        private const string Campos = "Id, ClienteId, Marca, Modelo, Serie, Accesorios, Condicion, CreadoUtc";
+        private const string Campos = "Id, ClienteId, Marca, Modelo, Serie, Accesorios, Condicion, CreadoUtc, Tipo";
 
         public EquipoSqlRepositorio(string cadenaConexion)
         {
@@ -29,7 +29,7 @@ namespace Repair.Core.Datos
             try
             {
                 using (var conexion = new SqlConnection(cadena))
-                using (var comando = new SqlCommand("SELECT " + Campos + " FROM dbo.Equipos\nWHERE @Texto = N'' OR Id = @Id OR ClienteId = @ClienteId OR Marca LIKE @Patron ESCAPE N'~' OR Modelo LIKE @Patron ESCAPE N'~' OR Serie LIKE @Patron ESCAPE N'~' OR Accesorios LIKE @Patron ESCAPE N'~' OR Condicion LIKE @Patron ESCAPE N'~' ORDER BY Id DESC;", conexion))
+                using (var comando = new SqlCommand("SELECT " + Campos + " FROM dbo.Equipos\nWHERE @Texto = N'' OR Id = @Id OR ClienteId = @ClienteId OR Tipo LIKE @Patron ESCAPE N'~' OR Marca LIKE @Patron ESCAPE N'~' OR Modelo LIKE @Patron ESCAPE N'~' OR Serie LIKE @Patron ESCAPE N'~' OR Accesorios LIKE @Patron ESCAPE N'~' OR Condicion LIKE @Patron ESCAPE N'~' ORDER BY Id DESC;", conexion))
                 {
                     comando.CommandTimeout = 10;
                     comando.Parameters.Add("@Texto", SqlDbType.NVarChar, 100).Value = (texto ?? "");
@@ -71,37 +71,31 @@ namespace Repair.Core.Datos
             try
             {
                 using (var conexion = new SqlConnection(cadena))
+                using (var comando = new SqlCommand(@"INSERT INTO dbo.Equipos (ClienteId, Tipo, Marca, Modelo, Serie, Accesorios, Condicion)
+OUTPUT INSERTED.Id VALUES (@ClienteId, @Tipo, @Marca, @Modelo, @Serie, @Accesorios, @Condicion);", conexion))
                 {
+                    comando.CommandTimeout = 10;
+                    comando.Parameters.Add("@ClienteId", SqlDbType.Int).Value = equipo.ClienteId;
+                    comando.Parameters.Add("@Tipo", SqlDbType.NVarChar, 60).Value = Nulo(equipo.Tipo);
+                    comando.Parameters.Add("@Marca", SqlDbType.NVarChar, 60).Value = equipo.Marca;
+                    comando.Parameters.Add("@Modelo", SqlDbType.NVarChar, 100).Value = equipo.Modelo;
+                    comando.Parameters.Add("@Serie", SqlDbType.NVarChar, 100).Value = Nulo(equipo.Serie);
+                    comando.Parameters.Add("@Accesorios", SqlDbType.NVarChar, 300).Value = Nulo(equipo.Accesorios);
+                    comando.Parameters.Add("@Condicion", SqlDbType.NVarChar, 500).Value = equipo.Condicion;
                     await conexion.OpenAsync();
                     using (var transaccion = conexion.BeginTransaction())
                     {
-                        using (var comando = new SqlCommand(@"INSERT INTO dbo.Equipos (ClienteId, Marca, Modelo, Serie, Accesorios, Condicion)
-OUTPUT INSERTED.Id VALUES (@ClienteId, @Marca, @Modelo, @Serie, @Accesorios, @Condicion);", conexion, transaccion))
+                        comando.Transaction = transaccion;
+                        int equipoId = Convert.ToInt32(await comando.ExecuteScalarAsync());
+                        using (var orden = new SqlCommand(@"INSERT dbo.Ordenes(ClienteId,EquipoId,Estado)
+VALUES(@ClienteId,@EquipoId,N'Pendiente');", conexion, transaccion))
                         {
-                            comando.CommandTimeout = 10;
-                            comando.Parameters.Add("@ClienteId", SqlDbType.Int).Value = equipo.ClienteId;
-                            comando.Parameters.Add("@Marca", SqlDbType.NVarChar, 60).Value = equipo.Marca;
-                            comando.Parameters.Add("@Modelo", SqlDbType.NVarChar, 100).Value = equipo.Modelo;
-                            comando.Parameters.Add("@Serie", SqlDbType.NVarChar, 100).Value = Nulo(equipo.Serie);
-                            comando.Parameters.Add("@Accesorios", SqlDbType.NVarChar, 300).Value = Nulo(equipo.Accesorios);
-                            comando.Parameters.Add("@Condicion", SqlDbType.NVarChar, 500).Value = equipo.Condicion;
-                            var nuevoId = Convert.ToInt32(await comando.ExecuteScalarAsync());
-
-                            using (var ordenCommand = new SqlCommand(@"IF NOT EXISTS (SELECT 1 FROM dbo.Ordenes WHERE ClienteId = @ClienteId)
-INSERT INTO dbo.Ordenes (ClienteId, Estado, Diagnostico, Observaciones)
-VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);", conexion, transaccion))
-                            {
-                                ordenCommand.CommandTimeout = 10;
-                                ordenCommand.Parameters.Add("@ClienteId", SqlDbType.Int).Value = equipo.ClienteId;
-                                ordenCommand.Parameters.Add("@Estado", SqlDbType.NVarChar, 50).Value = "Pendiente";
-                                ordenCommand.Parameters.Add("@Diagnostico", SqlDbType.NVarChar, -1).Value = DBNull.Value;
-                                ordenCommand.Parameters.Add("@Observaciones", SqlDbType.NVarChar, -1).Value = DBNull.Value;
-                                await ordenCommand.ExecuteNonQueryAsync();
-                            }
-
-                            transaccion.Commit();
-                            return nuevoId;
+                            orden.Parameters.Add("@ClienteId", SqlDbType.Int).Value = equipo.ClienteId;
+                            orden.Parameters.Add("@EquipoId", SqlDbType.Int).Value = equipoId;
+                            await orden.ExecuteNonQueryAsync();
                         }
+                        transaccion.Commit();
+                        return equipoId;
                     }
                 }
             }
@@ -115,10 +109,11 @@ VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);", conexion, transacc
             try
             {
                 using (var conexion = new SqlConnection(cadena))
-                using (var comando = new SqlCommand(@"UPDATE dbo.Equipos SET ClienteId=@ClienteId, Marca=@Marca, Modelo=@Modelo, Serie=@Serie, Accesorios=@Accesorios, Condicion=@Condicion WHERE Id=@Id;", conexion))
+                using (var comando = new SqlCommand(@"UPDATE dbo.Equipos SET ClienteId=@ClienteId, Tipo=@Tipo, Marca=@Marca, Modelo=@Modelo, Serie=@Serie, Accesorios=@Accesorios, Condicion=@Condicion WHERE Id=@Id;", conexion))
                 {
                     comando.CommandTimeout = 10;
                     comando.Parameters.Add("@ClienteId", SqlDbType.Int).Value = equipo.ClienteId;
+                    comando.Parameters.Add("@Tipo", SqlDbType.NVarChar, 60).Value = Nulo(equipo.Tipo);
                     comando.Parameters.Add("@Marca", SqlDbType.NVarChar, 60).Value = equipo.Marca;
                     comando.Parameters.Add("@Modelo", SqlDbType.NVarChar, 100).Value = equipo.Modelo;
                     comando.Parameters.Add("@Serie", SqlDbType.NVarChar, 100).Value = Nulo(equipo.Serie);
@@ -126,7 +121,8 @@ VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);", conexion, transacc
                     comando.Parameters.Add("@Condicion", SqlDbType.NVarChar, 500).Value = equipo.Condicion;
                     comando.Parameters.Add("@Id", SqlDbType.Int).Value = equipo.Id;
                     await conexion.OpenAsync();
-                    await comando.ExecuteNonQueryAsync();
+                    if (await comando.ExecuteNonQueryAsync() != 1)
+                        throw new InvalidOperationException("El equipo ya no está disponible. Actualiza el listado antes de reintentar.");
                 }
             }
             catch (SqlException ex) { throw new AccesoDatosException(ex); }
@@ -144,7 +140,8 @@ VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);", conexion, transacc
                     comando.CommandTimeout = 10;
                     comando.Parameters.Add("@Id", SqlDbType.Int).Value = id;
                     await conexion.OpenAsync();
-                    await comando.ExecuteNonQueryAsync();
+                    if (await comando.ExecuteNonQueryAsync() != 1)
+                        throw new InvalidOperationException("El equipo ya no está disponible. Actualiza el listado antes de reintentar.");
                 }
             }
             catch (SqlException ex) { throw new AccesoDatosException(ex); }
@@ -162,7 +159,8 @@ VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);", conexion, transacc
                 Serie = lector.IsDBNull(4) ? "" : lector.GetString(4),
                 Accesorios = lector.IsDBNull(5) ? "" : lector.GetString(5),
                 Condicion = lector.IsDBNull(6) ? "" : lector.GetString(6),
-                CreadoUtc = DateTime.SpecifyKind(lector.GetDateTime(7), DateTimeKind.Utc)
+                CreadoUtc = DateTime.SpecifyKind(lector.GetDateTime(7), DateTimeKind.Utc),
+                Tipo = lector.IsDBNull(8) ? TiposEquipo.SinEspecificar : lector.GetString(8)
             };
         }
     }

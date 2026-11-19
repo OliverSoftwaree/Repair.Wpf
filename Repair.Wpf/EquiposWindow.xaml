@@ -2,17 +2,26 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Equipos" Height="600" Width="900" WindowStartupLocation="CenterOwner" ResizeMode="CanResize" MinWidth="760" MinHeight="480">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <Window.Resources>
+        <ResourceDictionary><ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Temas/EquiposApariencia.xaml" />
+        </ResourceDictionary.MergedDictionaries></ResourceDictionary>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="#F4F6F7">
         <Grid Margin="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,12">
-                <TextBlock Text="Registro de equipo" FontSize="18" FontWeight="Bold" />
+                <TextBlock Text="Registro de equipo" FontSize="18" FontWeight="Bold" Foreground="#20333D" />
                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                     <TextBlock Text="Cliente:" Width="80" VerticalAlignment="Center" />
                     <ComboBox x:Name="ClienteSelector" Width="400" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock Text="Tipo de equipo:" Width="80" VerticalAlignment="Center" />
+                    <ComboBox x:Name="TipoSelector" Width="400" Height="22" Tag="Selecciona el tipo de equipo" ToolTip="Tipo de equipo que se recibe para reparación" AutomationProperties.Name="Tipo de equipo" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                     <TextBlock Text="Marca:" Width="80" VerticalAlignment="Center" />
@@ -33,16 +42,17 @@
                 <TextBlock Text="Condición:" Margin="0,8,0,0" />
                 <TextBox x:Name="CondicionInput" Height="80" TextWrapping="Wrap" AcceptsReturn="True" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-                    <Button x:Name="GuardarButton" Width="100" Content="Guardar" Margin="0,0,8,0" Click="GuardarButton_Click" />
-                    <Button Width="100" Content="Cerrar" Click="CerrarButton_Click" />
+                    <Button x:Name="GuardarButton" Width="100" Content="Guardar" Margin="0,0,8,0" Click="GuardarButton_Click" Style="{StaticResource EquipoGuardar}" />
+                    <Button Width="100" Content="Cerrar" Click="CerrarButton_Click" Style="{StaticResource EquipoSecundario}" />
                 </StackPanel>
                 <TextBlock x:Name="MensajeText" Foreground="Red" Margin="0,8,0,0" Visibility="Collapsed" TextWrapping="Wrap" />
             </StackPanel>
-            <ListView x:Name="Listado" Margin="-10,437,10,-7" Grid.RowSpan="2">
+            <ListView x:Name="Listado" Margin="-10,467,10,-7" Grid.RowSpan="2">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Id" Width="60" DisplayMemberBinding="{Binding Id}" />
                         <GridViewColumn Header="ClienteId" Width="80" DisplayMemberBinding="{Binding ClienteId}" />
+                        <GridViewColumn Header="Tipo de equipo" Width="180" DisplayMemberBinding="{Binding Tipo, TargetNullValue=Sin especificar}" />
                         <GridViewColumn Header="Marca" Width="120" DisplayMemberBinding="{Binding Marca}" />
                         <GridViewColumn Header="Modelo" Width="120" DisplayMemberBinding="{Binding Modelo}" />
                         <GridViewColumn Header="Serie" Width="120" DisplayMemberBinding="{Binding Serie}" />

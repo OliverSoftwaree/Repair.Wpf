@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
+    <ProjectGuid>{88733A4D-035F-461B-901E-686EA4F836C2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Repair.Clientes.Verificacion</RootNamespace>
+    <AssemblyName>Repair.Clientes.Verificacion</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>7.3</LangVersion>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" /><Reference Include="System.Core" />
+    <Reference Include="System.Data" /><Reference Include="System.Xml" />
+    <Reference Include="System.Xaml" /><Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" /><Reference Include="PresentationFramework" />
+    <Compile Include="Program.cs" />
+    <Compile Include="PruebasTipoEquipo.cs" />
+    <Compile Include="PruebasEquiposSql.cs" />
+    <Compile Include="PruebasSeguimiento.cs" />
+    <Compile Include="CapturasEntrega.cs" />
+    <None Include="..\sql\02-Equipos.sql"><Link>02-Equipos.sql</Link><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></None>
+    <None Include="..\sql\04-Equipos-Tipo.sql"><Link>04-Equipos-Tipo.sql</Link><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></None>
+    <None Include="..\sql\03-Clientes-Desarrollo.sql"><Link>03-Clientes-Desarrollo.sql</Link><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></None>
+    <ProjectReference Include="..\Repair.Core\Repair.Core.csproj"><Project>{EE2C0B13-E058-4DDD-8396-C2E5C21F0801}</Project><Name>Repair.Core</Name></ProjectReference>
+    <ProjectReference Include="..\Repair.Wpf\Repair.Wpf.csproj"><Project>{BC9D80A7-D23D-402E-8F82-28B64C862303}</Project><Name>Repair.Wpf</Name></ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

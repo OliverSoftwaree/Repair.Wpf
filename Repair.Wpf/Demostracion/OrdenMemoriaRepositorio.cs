@@ -53,7 +53,7 @@ namespace Repair.Wpf.Demostracion
             if (fila == null) return Task.CompletedTask;
             fila.Diagnostico = diagnostico ?? "";
             fila.Observaciones = observaciones ?? "";
-            fila.Estado = "En diagnóstico";
+            if (fila.Estado == "Pendiente" || fila.Estado == "En espera" || fila.Estado == "En diagnóstico") fila.Estado = "En diagnóstico";
             return Task.CompletedTask;
         }
 
@@ -65,7 +65,7 @@ namespace Repair.Wpf.Demostracion
         private static OrdenTrabajo Copiar(OrdenTrabajo o)
         {
             if (o == null) return null;
-            return new OrdenTrabajo { Id = o.Id, ClienteId = o.ClienteId, Estado = o.Estado, Diagnostico = o.Diagnostico, Observaciones = o.Observaciones, CreadoUtc = o.CreadoUtc };
+            return new OrdenTrabajo { Id = o.Id, ClienteId = o.ClienteId, EquipoId = o.EquipoId, Estado = o.Estado, Diagnostico = o.Diagnostico, Observaciones = o.Observaciones, CreadoUtc = o.CreadoUtc, EntregadaUtc = o.EntregadaUtc };
         }
     }
 }

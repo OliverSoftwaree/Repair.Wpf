@@ -6,6 +6,7 @@ namespace Repair.Core.Modelos
     {
         public int Id { get; set; }
         public int ClienteId { get; set; }
+        public string Tipo { get; set; }
         public string Marca { get; set; }
         public string Modelo { get; set; }
         public string Serie { get; set; }

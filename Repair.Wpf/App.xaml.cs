@@ -3,6 +3,8 @@ using System.Configuration;
 using System.Linq;
 using System.Windows;
 using Repair.Core.Datos;
+using Repair.Core.Integracion;
+using Repair.Core.Seguridad;
 using Repair.Core.Logica;
 using Repair.Wpf.Demostracion;
 
@@ -13,27 +15,24 @@ namespace Repair.Wpf
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            string modo = ConfigurationManager.AppSettings["Modo"] ?? "";
-            bool demo = string.Equals(modo, "Demostracion", StringComparison.OrdinalIgnoreCase)
-                || (string.IsNullOrWhiteSpace(modo) && e.Args.Contains("--demo"));
-            IClienteRepositorio repositorio;
-            if (demo) repositorio = new ClienteMemoriaRepositorio();
-            else
+            string cadena = ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString;
+            if (string.IsNullOrWhiteSpace(cadena))
             {
-                var configuracion = ConfigurationManager.ConnectionStrings["RepairSql"];
-                if (configuracion == null || string.IsNullOrWhiteSpace(configuracion.ConnectionString))
-                {
-                    MessageBox.Show("Falta RepairSql en App.config. Consulta la guía de inicio.", "Repair", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Shutdown(1); return;
-                }
-                repositorio = new ClienteSqlRepositorio(configuracion.ConnectionString);
+                MessageBox.Show("Falta RepairSql en App.config. Consulta la guía de inicio.", "Repair", MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown(1); return;
             }
-            // Registrar la implementación WPF de IModuloEquipos.
-            Repair.Wpf.Integracion.IModuloEquipos modulo;
-            if (demo) modulo = new Repair.Wpf.Integracion.ModuloEquipos(true, null);
-            else modulo = new Repair.Wpf.Integracion.ModuloEquipos(false, ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString);
-            MainWindow = new MainWindow(new ClienteServicio(repositorio), demo, modulo);
+
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            var acceso = new AccesoWindow(cadena);
+            if (acceso.ShowDialog() != true) { Shutdown(); return; }
+            var sesion = acceso.Sesion;
+            IClienteRepositorio repositorio = new ClientesAutorizados(new ClienteSqlRepositorio(cadena), sesion);
+            var principal = new MainWindow(new ClienteServicio(repositorio), false, null, animaciones: null,
+                consultaSeguimiento: new ConsultaSeguimientoSql(cadena));
+            principal.ConfigurarEntrega(cadena, sesion);
+            MainWindow = principal;
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
             MainWindow.Show();
-        } 
+        }
     }
 }

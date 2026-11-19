@@ -45,13 +45,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Presentacion\DiagnosticoControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Presentacion\EquiposControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Presentacion\SeguimientoControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Temas\Repair.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Temas\EquiposApariencia.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -59,7 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Demostracion\EquipoMemoriaRepositorio.cs" />
-    <Compile Include="Demostracion\OrdenMemoriaRepositorio.cs" />
+    <Compile Include="Demostracion\ConsultaSeguimientoDemo.cs" />
     <Compile Include="EquiposWindow.xaml.cs">
       <DependentUpon>EquiposWindow.xaml</DependentUpon>
     </Compile>
@@ -68,14 +72,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentacion\ClienteFila.cs" />
-    <Compile Include="Presentacion\DiagnosticoControl.xaml.cs">
-      <DependentUpon>DiagnosticoControl.xaml</DependentUpon>
+    <Compile Include="Presentacion\ClienteCsv.cs" />
+    <Compile Include="MainWindow.ClientesCsv.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Presentacion\DisposicionAdaptable.cs" />
     <Compile Include="Integracion\IModuloEquipos.cs" />
     <Compile Include="Demostracion\ClienteMemoriaRepositorio.cs" />
     <Compile Include="Presentacion\EquiposControl.xaml.cs">
       <DependentUpon>EquiposControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\SeguimientoControl.xaml.cs">
+      <DependentUpon>SeguimientoControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="App.config" />
@@ -85,5 +93,26 @@
       <Name>Repair.Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccesoWindow.xaml.cs" />
+    <Compile Include="Demostracion\OrdenMemoriaRepositorio.cs" />
+    <Compile Include="MainWindow.Entrega.cs" />
+    <Compile Include="Presentacion\DiagnosticoControl.xaml.cs" />
+    <Compile Include="Presentacion\ReportesControl.xaml.cs" />
+    <Page Include="AccesoWindow.xaml"><Generator>MSBuild:Compile</Generator></Page>
+    <Page Include="Presentacion\DiagnosticoControl.xaml"><Generator>MSBuild:Compile</Generator></Page>
+    <Page Include="Presentacion\ReportesControl.xaml"><Generator>MSBuild:Compile</Generator></Page>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Printing" />
+    <Reference Include="ReachFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Repair.Instalacion\Repair.Instalacion.csproj">
+      <Name>Repair.Instalacion</Name><ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="CopiarPreparacion" AfterTargets="Build">
+    <Copy SourceFiles="..\Repair.Instalacion\bin\$(Configuration)\Preparar-Repair.exe" DestinationFolder="$(OutputPath)" />
+  </Target>
 </Project>

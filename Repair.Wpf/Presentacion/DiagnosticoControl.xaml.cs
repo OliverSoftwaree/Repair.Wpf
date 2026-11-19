@@ -14,6 +14,9 @@ namespace Repair.Wpf.Presentacion
         private Repair.Core.Integracion.IConsultaClientes clientesConsulta;
         private Repair.Core.Modelos.OrdenTrabajo ordenActual;
         private Repair.Core.Modelos.Cliente clienteActual;
+        private bool guardando;
+        private int consultaVersion;
+        public bool OperacionEnCurso => guardando;
 
         public DiagnosticoControl()
         {
@@ -70,9 +73,12 @@ namespace Repair.Wpf.Presentacion
         private async Task CargarOrdenAsync(int id)
         {
             if (servicio == null) return;
+            int version = ++consultaVersion;
             try
             {
-                ordenActual = await servicio.ObtenerAsync(id);
+                var obtenida = await servicio.ObtenerAsync(id);
+                if (version != consultaVersion) return;
+                ordenActual = obtenida;
                 if (ordenActual == null)
                 {
                     ordenActual = null;
@@ -84,7 +90,9 @@ namespace Repair.Wpf.Presentacion
                     return;
                 }
 
-                clienteActual = await clientesConsulta.ObtenerAsync(ordenActual.ClienteId);
+                var cliente = await clientesConsulta.ObtenerAsync(ordenActual.ClienteId);
+                if (version != consultaVersion) return;
+                clienteActual = cliente;
                 OrdenInfoText.Text = "Orden: " + ordenActual.Id + " · ID cliente: " + ordenActual.ClienteId;
                 ClienteInfoText.Text = "Cliente: " + (clienteActual != null ? clienteActual.Nombre : "Cliente no encontrado") + " (ID " + ordenActual.ClienteId + ")";
                 EstadoText.Text = "Estado: " + (string.IsNullOrWhiteSpace(ordenActual.Estado) ? "Pendiente" : ordenActual.Estado);
@@ -151,7 +159,7 @@ namespace Repair.Wpf.Presentacion
 
         private async void GuardarDiagnosticoButton_Click(object sender, RoutedEventArgs e)
         {
-            if (servicio == null || ordenActual == null)
+            if (guardando || servicio == null || ordenActual == null)
             {
                 MostrarMensaje("Primero busca una orden válida para guardar su diagnóstico.", Brushes.Red);
                 return;
@@ -165,19 +173,31 @@ namespace Repair.Wpf.Presentacion
                 if (AccionCombo != null && AccionCombo.SelectedItem is ComboBoxItem accionItem)
                     detalle += "Acción: " + accionItem.Content + ". ";
 
+                guardando = true;
+                GuardarDiagnosticoButton.IsEnabled = false;
+                ClienteSelector.IsEnabled = OrdenSelector.IsEnabled = BuscarOrdenButton.IsEnabled = false;
+                OrdenInput.IsReadOnly = true;
+                int ordenId = ordenActual.Id;
                 var textoCompleto = (DiagnosticoInput.Text ?? "").Trim();
+                if (string.IsNullOrWhiteSpace(textoCompleto)) throw new ArgumentException("Escribe el diagnóstico encontrado.");
                 var resumen = string.IsNullOrWhiteSpace(textoCompleto) ? "Sin diagnóstico registrado." : textoCompleto;
                 var observaciones = (ObservacionesInput.Text ?? "").Trim();
                 var textoFinal = detalle + resumen;
 
-                await servicio.GuardarDiagnosticoAsync(ordenActual.Id, textoFinal, observaciones);
-                ordenActual.Estado = "En diagnóstico";
-                EstadoText.Text = "Estado: En diagnóstico";
+                await servicio.GuardarDiagnosticoAsync(ordenId, textoFinal, observaciones);
+                ordenActual = await servicio.ObtenerAsync(ordenId);
+                EstadoText.Text = "Estado: " + ordenActual.Estado;
                 MostrarMensaje("Diagnóstico guardado correctamente en SQL Server.", Brushes.DarkGreen);
             }
             catch (Exception ex)
             {
                 MostrarMensaje("No se pudo guardar el diagnóstico: " + ex.Message, Brushes.Red);
+            }
+            finally
+            {
+                guardando = false;
+                GuardarDiagnosticoButton.IsEnabled = ClienteSelector.IsEnabled = OrdenSelector.IsEnabled = BuscarOrdenButton.IsEnabled = true;
+                OrdenInput.IsReadOnly = false;
             }
         }
 

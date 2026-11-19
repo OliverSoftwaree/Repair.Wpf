@@ -14,14 +14,17 @@ namespace Repair.Wpf
         private readonly EquipoServicio servicio;
         private readonly IConsultaClientes clientesConsulta;
         private readonly ObservableCollection<Equipo> filas = new ObservableCollection<Equipo>();
+        private bool operacionEnCurso;
 
 public EquiposWindow(EquipoServicio servicio, IConsultaClientes clientes)
 {
     InitializeComponent();
+    TipoSelector.ItemsSource = TiposEquipo.Opciones;
     this.servicio = servicio ?? throw new ArgumentNullException(nameof(servicio));
     this.clientesConsulta = clientes ?? throw new ArgumentNullException(nameof(clientes));
     Listado.ItemsSource = filas;
     Loaded += EquiposWindow_Loaded;
+    Closing += (s, e) => { if (operacionEnCurso) e.Cancel = true; };
 }
 
 private async void EquiposWindow_Loaded(object sender, RoutedEventArgs e)
@@ -49,7 +52,7 @@ private async void EquiposWindow_Loaded(object sender, RoutedEventArgs e)
             }
         }
 
-        private async Task CargarListadoAsync()
+        private async Task<bool> CargarListadoAsync()
         {
             try
             {
@@ -63,34 +66,45 @@ private async void EquiposWindow_Loaded(object sender, RoutedEventArgs e)
                     MensajeText.Visibility = Visibility.Visible;
                 }
                 else MensajeText.Visibility = Visibility.Collapsed;
+                return true;
             }
             catch (Exception ex)
             {
                 MensajeText.Text = "Error al consultar equipos: " + ex.Message;
                 MensajeText.Foreground = System.Windows.Media.Brushes.Red;
                 MensajeText.Visibility = Visibility.Visible;
+                return false;
             }
         }
 
 
 private async void GuardarButton_Click(object sender, RoutedEventArgs e)
 {
+            if (operacionEnCurso) return;
             MensajeText.Visibility = Visibility.Collapsed;
             int clienteId = 0;
             if (ClienteSelector.SelectedItem is ComboBoxItem item && item.Tag is int id) clienteId = id;
             var equipo = new Equipo
             {
                 ClienteId = clienteId,
+                Tipo = TipoSelector.SelectedItem as string,
                 Marca = MarcaInput.Text,
                 Modelo = ModeloInput.Text,
                 Serie = SerieInput.Text,
                 Accesorios = AccesoriosInput.Text,
                 Condicion = CondicionInput.Text
             };
+            operacionEnCurso = true;
+            GuardarButton.IsEnabled = false;
             try
             {
                 int nuevoId = await servicio.RegistrarAsync(equipo);
-                await CargarListadoAsync();
+                if (!await CargarListadoAsync())
+                {
+                    MensajeText.Text = "Equipo guardado (Id: " + nuevoId + "), pero no se pudo recuperar el listado. Vuelve a abrir esta ventana para consultarlo.";
+                    MensajeText.Foreground = System.Windows.Media.Brushes.DarkOrange; MensajeText.Visibility = Visibility.Visible;
+                    return;
+                }
                 MensajeText.Text = "Guardado correctamente (Id: " + nuevoId + ")";
                 MensajeText.Foreground = System.Windows.Media.Brushes.DarkGreen;
                 MensajeText.Visibility = Visibility.Visible;
@@ -115,6 +129,7 @@ private async void GuardarButton_Click(object sender, RoutedEventArgs e)
                 MensajeText.Foreground = System.Windows.Media.Brushes.Red;
                 MensajeText.Visibility = Visibility.Visible;
             }
+            finally { operacionEnCurso = false; GuardarButton.IsEnabled = ClienteSelector.Items.Count > 0; }
         }
 
 private void CerrarButton_Click(object sender, RoutedEventArgs e) { Close(); }

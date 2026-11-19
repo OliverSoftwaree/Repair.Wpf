@@ -36,6 +36,7 @@ namespace Repair.Core.Logica
             var equipo = new Equipo
             {
                 ClienteId = entrada.ClienteId,
+                Tipo = TiposEquipo.Normalizar(entrada.Tipo),
                 Marca = (entrada.Marca ?? "").Trim(),
                 Modelo = (entrada.Modelo ?? "").Trim(),
                 Serie = (entrada.Serie ?? "").Trim(),
@@ -43,6 +44,7 @@ namespace Repair.Core.Logica
                 Condicion = (entrada.Condicion ?? "").Trim()
             };
             var errores = new Dictionary<string, string>();
+            if (equipo.Tipo == null) errores["Tipo"] = "Selecciona un tipo de equipo de la lista.";
             if (equipo.ClienteId <= 0) errores["ClienteId"] = "Selecciona un cliente válido.";
             if (equipo.Marca.Length < 1 || equipo.Marca.Length > 60 || equipo.Marca.Any(char.IsControl))
                 errores["Marca"] = "Escribe la marca (1-60 caracteres, sin saltos de línea).";
@@ -74,6 +76,7 @@ namespace Repair.Core.Logica
             {
                 Id = entrada.Id,
                 ClienteId = entrada.ClienteId,
+                Tipo = TiposEquipo.Normalizar(entrada.Tipo),
                 Marca = (entrada.Marca ?? "").Trim(),
                 Modelo = (entrada.Modelo ?? "").Trim(),
                 Serie = (entrada.Serie ?? "").Trim(),
@@ -81,6 +84,7 @@ namespace Repair.Core.Logica
                 Condicion = (entrada.Condicion ?? "").Trim()
             };
             var errores = new Dictionary<string, string>();
+            if (equipo.Tipo == null) errores["Tipo"] = "Selecciona un tipo de equipo de la lista.";
             if (equipo.ClienteId <= 0) errores["ClienteId"] = "Selecciona un cliente válido.";
             if (equipo.Marca.Length < 1 || equipo.Marca.Length > 60 || equipo.Marca.Any(char.IsControl))
                 errores["Marca"] = "Escribe la marca (1-60 caracteres, sin saltos de línea).";

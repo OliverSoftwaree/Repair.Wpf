@@ -46,18 +46,24 @@
               <Button x:Name="NavClients" Style="{StaticResource NavButton}" Click="NavClients_Click" ToolTip="Clientes" AutomationProperties.Name="Clientes">
                 <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconClients}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavClientsText" Text="Clientes" Margin="14,0,0,0" /></StackPanel>
               </Button>
-              <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="NavDevices_Click" ToolTip="Equipos · próximo avance" AutomationProperties.Name="Equipos, próximo avance">
+              <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="NavDevices_Click" ToolTip="Equipos" AutomationProperties.Name="Equipos">
                 <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconDevices}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavDevicesText" Text="Equipos" Margin="14,0,0,0" /></StackPanel>
               </Button>
               <Button x:Name="NavDiagnostico" Style="{StaticResource NavButton}" Click="NavDiagnostico_Click" ToolTip="Diagnóstico técnico" AutomationProperties.Name="Diagnóstico técnico">
                 <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconSearch}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavDiagnosticoText" Text="Diagnóstico" Margin="14,0,0,0" /></StackPanel>
               </Button>
-              <Border x:Name="NextModuleLabel" Background="#25343A" CornerRadius="7" Margin="14,9,14,0" Padding="9,6"><TextBlock Text="Equipos: próximo avance" FontSize="10" Foreground="#9DB0B9" TextAlignment="Center" /></Border>
+              <Button x:Name="NavReportes" Style="{StaticResource NavButton}" Click="NavReportes_Click" ToolTip="Reportes" AutomationProperties.Name="Reportes">
+                <StackPanel Orientation="Horizontal"><Path Data="M4,3 L19,3 19,21 4,21 Z M8,8 L15,8 M8,12 L15,12 M8,16 L15,16" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavReportesText" Text="Reportes" Margin="14,0,0,0" /></StackPanel>
+              </Button>
+              <Button x:Name="NavSeguimiento" Style="{StaticResource NavButton}" Click="NavSeguimiento_Click" ToolTip="Seguimiento y entrega" AutomationProperties.Name="Seguimiento y entrega">
+                <StackPanel Orientation="Horizontal"><Path Data="M5,3 L17,3 20,6 20,21 5,21 Z M8,13 L11,16 17,10" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavSeguimientoText" Text="Seguimiento" Margin="14,0,0,0" /></StackPanel>
+              </Button>
+              <Border x:Name="NextModuleLabel" Background="#25343A" CornerRadius="7" Margin="14,9,14,0" Padding="9,6"><TextBlock Text="Registro de equipos" FontSize="10" Foreground="#9DB0B9" TextAlignment="Center" /></Border>
             </StackPanel>
             <Border Grid.Row="3" BorderBrush="#3A484D" BorderThickness="0,1,0,0" Padding="4,18,4,0">
               <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="32" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
                 <Border Background="#36474F" CornerRadius="9" Height="32"><TextBlock Text="B" Foreground="#E7EFF1" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
-                <StackPanel x:Name="TeamText" Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="Grupo B" FontSize="12" Foreground="#EDF2F3" /><TextBlock Text="Proyecto Integrador I · v0.2" FontSize="9" Foreground="#8EA8B4" Margin="0,3,0,0" /></StackPanel>
+                <StackPanel x:Name="TeamText" Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="Grupo B" FontSize="12" Foreground="#EDF2F3" /><TextBlock Text="Proyecto Integrador I · 1.0 RC1" FontSize="9" Foreground="#8EA8B4" Margin="0,3,0,0" /></StackPanel>
               </Grid>
             </Border>
           </Grid>
@@ -117,7 +123,7 @@
                       <StackPanel Orientation="Horizontal" Margin="0,13,0,2"><TextBlock x:Name="HomeCount" Text="—" FontSize="40" FontWeight="SemiBold" /><TextBlock Text="clientes" FontSize="13" Foreground="{StaticResource Muted}" VerticalAlignment="Bottom" Margin="10,0,0,10" /></StackPanel>
                       <TextBlock x:Name="HomeCountHint" Text="Consulta pendiente." FontSize="11" Style="{StaticResource MutedText}" />
                       <Button Content="Abrir directorio →" HorizontalAlignment="Left" Style="{StaticResource QuietButton}" Padding="0,12" Click="NavClients_Click" Margin="0,7,0,0" />
-                      <Border Background="#F5F7F8" CornerRadius="9" Padding="12" Margin="0,8,0,0"><TextBlock Text="Los equipos se incorporarán en el próximo avance." FontSize="11" Foreground="{StaticResource Muted}" /></Border>
+                      <Border Background="#F5F7F8" CornerRadius="9" Padding="12" Margin="0,8,0,0"><TextBlock Text="Registra y consulta equipos desde el menú." FontSize="11" Foreground="{StaticResource Muted}" /></Border>
                     </StackPanel>
                   </Border>
                 </Grid>
@@ -129,7 +135,10 @@
               <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
               <Grid Margin="0,0,0,24"><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel Margin="0,0,15,0"><TextBlock Text="Personas primero." FontSize="30" FontWeight="SemiBold" /><TextBlock Text="Cada cliente, con sus datos claros y a mano." Style="{StaticResource MutedText}" FontSize="12" Margin="0,8,0,0" /></StackPanel>
-                <Button x:Name="NewClientButton" Grid.Column="1" Style="{StaticResource PrimaryButton}" VerticalAlignment="Top" Click="NewClient_Click" ToolTip="Nuevo cliente · Ctrl+N" AutomationProperties.AutomationId="NuevoCliente"><StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconPlus}" Style="{StaticResource IconPath}" Width="16" Height="16" Margin="0,0,9,0" /><TextBlock Text="Nuevo cliente" /></StackPanel></Button>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                  <Button x:Name="ExportClientsButton" Content="Exportar CSV" Click="ExportClients_Click" Margin="0,0,10,0" ToolTip="Guarda las filas del resultado visible. En demostración exporta datos temporales." AutomationProperties.AutomationId="ExportarClientesCsv" />
+                  <Button x:Name="NewClientButton" Grid.Column="1" Style="{StaticResource PrimaryButton}" VerticalAlignment="Top" Click="NewClient_Click" ToolTip="Nuevo cliente · Ctrl+N" AutomationProperties.AutomationId="NuevoCliente"><StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconPlus}" Style="{StaticResource IconPath}" Width="16" Height="16" Margin="0,0,9,0" /><TextBlock Text="Nuevo cliente" /></StackPanel></Button>
+                </StackPanel>
               </Grid>
               <Border Grid.Row="1" Style="{StaticResource Card}" Padding="14" Margin="0,0,0,15">
                 <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
@@ -189,14 +198,9 @@
                     <presentacion:EquiposControl x:Name="EquiposControl" Grid.Row="1" />
                 </Grid>
             </Grid>
-
-            <Grid x:Name="DiagnosticoPage" Visibility="Collapsed">
-                <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,12,6">
-                    <TextBlock Text="Diagnóstico técnico" Foreground="#7E8E98" FontSize="12" FontWeight="SemiBold" />
-                </StackPanel>
-                <presentacion:DiagnosticoControl x:Name="DiagnosticoControl" Grid.Row="1" />
-            </Grid>
+            <presentacion:DiagnosticoControl x:Name="DiagnosticoPage" Visibility="Collapsed" />
+            <presentacion:ReportesControl x:Name="ReportesPage" Visibility="Collapsed" />
+            <presentacion:SeguimientoControl x:Name="SeguimientoPage" Visibility="Collapsed" />
           </Grid>
         </Grid>
       </Grid>

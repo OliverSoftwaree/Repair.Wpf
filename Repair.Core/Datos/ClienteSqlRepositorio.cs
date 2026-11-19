@@ -85,17 +85,6 @@ OUTPUT INSERTED.Id VALUES (@Nombre, @Telefono, @Correo, @Notas);", conexion, tra
                             comando.Parameters.Add("@Notas", SqlDbType.NVarChar, 300).Value = Nulo(cliente.Notas);
                             var id = Convert.ToInt32(await comando.ExecuteScalarAsync());
 
-                            using (var ordenCommand = new SqlCommand(@"INSERT INTO dbo.Ordenes (ClienteId, Estado, Diagnostico, Observaciones)
-VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);", conexion, transaccion))
-                            {
-                                ordenCommand.CommandTimeout = 10;
-                                ordenCommand.Parameters.Add("@ClienteId", SqlDbType.Int).Value = id;
-                                ordenCommand.Parameters.Add("@Estado", SqlDbType.NVarChar, 50).Value = "Pendiente";
-                                ordenCommand.Parameters.Add("@Diagnostico", SqlDbType.NVarChar, -1).Value = DBNull.Value;
-                                ordenCommand.Parameters.Add("@Observaciones", SqlDbType.NVarChar, -1).Value = DBNull.Value;
-                                await ordenCommand.ExecuteNonQueryAsync();
-                            }
-
                             transaccion.Commit();
                             return id;
                         }

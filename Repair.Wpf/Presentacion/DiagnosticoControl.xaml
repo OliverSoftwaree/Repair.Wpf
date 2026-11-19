@@ -1,8 +1,8 @@
 <UserControl x:Class="Repair.Wpf.Presentacion.DiagnosticoControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="760">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="8">
@@ -14,7 +14,7 @@
 
             <StackPanel Grid.Row="0" Margin="0,0,0,12">
                 <TextBlock Text="Diagnóstico técnico" FontSize="18" FontWeight="Bold" />
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <WrapPanel Margin="0,10,0,0">
                     <TextBlock Text="Cliente:" Width="70" VerticalAlignment="Center" />
                     <ComboBox x:Name="ClienteSelector" Width="220" SelectionChanged="ClienteSelector_SelectionChanged" />
                     <TextBlock Text="Orden:" Width="60" Margin="12,0,0,0" VerticalAlignment="Center" />
@@ -22,7 +22,7 @@
                     <TextBlock Text="ID:" Width="30" Margin="12,0,0,0" VerticalAlignment="Center" />
                     <TextBox x:Name="OrdenInput" Width="110" />
                     <Button x:Name="BuscarOrdenButton" Width="110" Margin="10,0,0,0" Content="Buscar" Click="BuscarOrdenButton_Click" />
-                </StackPanel>
+                </WrapPanel>
             </StackPanel>
 
             <Border Grid.Row="1" BorderBrush="#E1E6E8" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,12">
