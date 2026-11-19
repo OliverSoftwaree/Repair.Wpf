@@ -83,7 +83,20 @@ OUTPUT INSERTED.Id VALUES (@ClienteId, @Tipo, @Marca, @Modelo, @Serie, @Accesori
                     comando.Parameters.Add("@Accesorios", SqlDbType.NVarChar, 300).Value = Nulo(equipo.Accesorios);
                     comando.Parameters.Add("@Condicion", SqlDbType.NVarChar, 500).Value = equipo.Condicion;
                     await conexion.OpenAsync();
-                    return Convert.ToInt32(await comando.ExecuteScalarAsync());
+                    using (var transaccion = conexion.BeginTransaction())
+                    {
+                        comando.Transaction = transaccion;
+                        int equipoId = Convert.ToInt32(await comando.ExecuteScalarAsync());
+                        using (var orden = new SqlCommand(@"INSERT dbo.Ordenes(ClienteId,EquipoId,Estado)
+VALUES(@ClienteId,@EquipoId,N'Pendiente');", conexion, transaccion))
+                        {
+                            orden.Parameters.Add("@ClienteId", SqlDbType.Int).Value = equipo.ClienteId;
+                            orden.Parameters.Add("@EquipoId", SqlDbType.Int).Value = equipoId;
+                            await orden.ExecuteNonQueryAsync();
+                        }
+                        transaccion.Commit();
+                        return equipoId;
+                    }
                 }
             }
             catch (SqlException ex) { throw new AccesoDatosException(ex); }

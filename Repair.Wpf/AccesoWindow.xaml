@@ -1,0 +1,15 @@
+<Window x:Class="Repair.Wpf.AccesoWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="Repair · Acceso" Width="470" Height="580"
+ MinWidth="420" MinHeight="500" WindowStartupLocation="CenterScreen" Background="#F4F6F7" FontFamily="Segoe UI">
+ <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#F4F6F7"><StackPanel Margin="34,28">
+  <Border Background="#1C2A30" CornerRadius="16" Padding="22"><StackPanel><TextBlock Text="Repair" Foreground="White" FontSize="32" FontWeight="SemiBold"/><TextBlock Text="Espacio del taller" Foreground="#BCCFD2" Margin="0,7,0,0"/></StackPanel></Border>
+  <TextBlock Text="Inicia tu sesión" FontSize="23" FontWeight="SemiBold" Margin="0,25,0,18"/>
+  <Label Content="_Usuario" Target="{Binding ElementName=Usuario}" Padding="0,0,0,6"/><TextBox x:Name="Usuario" MaxLength="60" MinHeight="38" Padding="9"/>
+  <Label Content="_Contraseña" Target="{Binding ElementName=Clave}" Padding="0,15,0,6"/><PasswordBox x:Name="Clave" MaxLength="200" MinHeight="38" Padding="9"/>
+  <CheckBox x:Name="CambiarClave" Content="Cambiar mi contraseña" Margin="0,16,0,6"/>
+  <TextBlock Text="Contraseña nueva, solo para cambiarla" Foreground="#657880" FontSize="11"/>
+  <PasswordBox x:Name="NuevaClave" MaxLength="200" MinHeight="36" Padding="8" Margin="0,5,0,12"/>
+  <Button x:Name="Entrar" Content="Entrar" IsDefault="True" Click="Entrar_Click" Padding="14,10" Background="#ED9252"/>
+  <TextBlock x:Name="Mensaje" TextWrapping="Wrap" Foreground="#8B3D26" Margin="0,13,0,0"/>
+ </StackPanel></ScrollViewer>
+</Window>

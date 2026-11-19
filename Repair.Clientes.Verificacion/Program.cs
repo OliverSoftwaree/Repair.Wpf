@@ -33,12 +33,17 @@ namespace Repair.Clientes.Verificacion
         [STAThread]
         private static int Main(string[] args)
         {
+            if (args.Length == 2 && args[0] == "--capturas-entrega") return CapturasEntrega.Ejecutar(args[1]);
             if (args.Length == 0 || args[0] == "--equipos-sql" || args[0] == "--equipo-leer" || args[0] == "--asincronia")
-                return PruebasEquiposSql.Ejecutar(args, Carpeta);
+            {
+                MessageBox.Show("Para comprobar SQL de la entrega, ejecuta Preparar-Repair.exe desde el paquete. Esta herramienta conserva las pruebas locales --tipo, --csv y --seguimiento.", "Repair · comprobaciones");
+                return 2;
+            }
             if (args.Length == 1 && args[0] == "--tipo") return PruebasTipoEquipo.Ejecutar(Carpeta);
             if (args.Length == 1 && args[0] == "--seguimiento") return PruebasSeguimiento.Ejecutar(Carpeta);
             bool lectura = args.Length == 3 && args[0] == "--sql-leer";
             bool soloCsv = args.Length == 1 && args[0] == "--csv";
+            if (!soloCsv) return 2;
             string archivo = Path.Combine(Carpeta, lectura ? "sql-segundo-proceso.log" : soloCsv ? "csv.log" : "clientes-sql.log");
             try
             {

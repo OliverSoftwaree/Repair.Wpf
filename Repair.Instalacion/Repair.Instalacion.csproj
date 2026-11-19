@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ <PropertyGroup><Configuration Condition="'$(Configuration)'==''">Debug</Configuration><Platform Condition="'$(Platform)'==''">AnyCPU</Platform><OutputType>Exe</OutputType><AssemblyName>Preparar-Repair</AssemblyName><RootNamespace>Repair.Instalacion</RootNamespace><TargetFrameworkVersion>v4.8</TargetFrameworkVersion><LangVersion>7.3</LangVersion><OutputPath>bin\$(Configuration)\</OutputPath><Deterministic>true</Deterministic></PropertyGroup>
+ <ItemGroup><Reference Include="System"/><Reference Include="System.Core"/><Reference Include="System.Data"/><Reference Include="System.Configuration"/><Reference Include="System.Xml"/>
+ <Compile Include="Program.cs"/><Compile Include="PruebasEntrega.cs"/>
+ <EmbeddedResource Include="..\sql\05-Entrega-RC1.sql"><Link>05-Entrega-RC1.sql</Link></EmbeddedResource>
+ <ProjectReference Include="..\Repair.Core\Repair.Core.csproj"><Project>{EE2C0B13-E058-4DDD-8396-C2E5C21F0801}</Project><Name>Repair.Core</Name></ProjectReference>
+ </ItemGroup><Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+</Project>

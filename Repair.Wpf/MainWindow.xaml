@@ -49,6 +49,12 @@
               <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="NavDevices_Click" ToolTip="Equipos" AutomationProperties.Name="Equipos">
                 <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconDevices}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavDevicesText" Text="Equipos" Margin="14,0,0,0" /></StackPanel>
               </Button>
+              <Button x:Name="NavDiagnostico" Style="{StaticResource NavButton}" Click="NavDiagnostico_Click" ToolTip="Diagnóstico técnico" AutomationProperties.Name="Diagnóstico técnico">
+                <StackPanel Orientation="Horizontal"><Path Data="{StaticResource IconSearch}" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavDiagnosticoText" Text="Diagnóstico" Margin="14,0,0,0" /></StackPanel>
+              </Button>
+              <Button x:Name="NavReportes" Style="{StaticResource NavButton}" Click="NavReportes_Click" ToolTip="Reportes" AutomationProperties.Name="Reportes">
+                <StackPanel Orientation="Horizontal"><Path Data="M4,3 L19,3 19,21 4,21 Z M8,8 L15,8 M8,12 L15,12 M8,16 L15,16" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavReportesText" Text="Reportes" Margin="14,0,0,0" /></StackPanel>
+              </Button>
               <Button x:Name="NavSeguimiento" Style="{StaticResource NavButton}" Click="NavSeguimiento_Click" ToolTip="Seguimiento y entrega" AutomationProperties.Name="Seguimiento y entrega">
                 <StackPanel Orientation="Horizontal"><Path Data="M5,3 L17,3 20,6 20,21 5,21 Z M8,13 L11,16 17,10" Style="{StaticResource IconPath}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" /><TextBlock x:Name="NavSeguimientoText" Text="Seguimiento" Margin="14,0,0,0" /></StackPanel>
               </Button>
@@ -57,7 +63,7 @@
             <Border Grid.Row="3" BorderBrush="#3A484D" BorderThickness="0,1,0,0" Padding="4,18,4,0">
               <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="32" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
                 <Border Background="#36474F" CornerRadius="9" Height="32"><TextBlock Text="B" Foreground="#E7EFF1" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" /></Border>
-                <StackPanel x:Name="TeamText" Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="Grupo B" FontSize="12" Foreground="#EDF2F3" /><TextBlock Text="Proyecto Integrador I · v0.2" FontSize="9" Foreground="#8EA8B4" Margin="0,3,0,0" /></StackPanel>
+                <StackPanel x:Name="TeamText" Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="Grupo B" FontSize="12" Foreground="#EDF2F3" /><TextBlock Text="Proyecto Integrador I · 1.0 RC1" FontSize="9" Foreground="#8EA8B4" Margin="0,3,0,0" /></StackPanel>
               </Grid>
             </Border>
           </Grid>
@@ -192,6 +198,8 @@
                     <presentacion:EquiposControl x:Name="EquiposControl" Grid.Row="1" />
                 </Grid>
             </Grid>
+            <presentacion:DiagnosticoControl x:Name="DiagnosticoPage" Visibility="Collapsed" />
+            <presentacion:ReportesControl x:Name="ReportesPage" Visibility="Collapsed" />
             <presentacion:SeguimientoControl x:Name="SeguimientoPage" Visibility="Collapsed" />
           </Grid>
         </Grid>

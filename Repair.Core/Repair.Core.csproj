@@ -45,5 +45,17 @@
     <Compile Include="Modelos\OrdenSeguimiento.cs" />
     <Compile Include="Modelos\TiposEquipo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Datos\IOrdenRepositorio.cs" />
+    <Compile Include="Datos\OrdenSqlRepositorio.cs" />
+    <Compile Include="Datos\ReporteOrdenesSql.cs" />
+    <Compile Include="Integracion\IConsultaOrdenes.cs" />
+    <Compile Include="Logica\OrdenServicio.cs" />
+    <Compile Include="Logica\SeguimientoServicio.cs" />
+    <Compile Include="Modelos\OrdenTrabajo.cs" />
+    <Compile Include="Seguridad\AutenticacionSql.cs" />
+    <Compile Include="Seguridad\RepositoriosAutorizados.cs" />
+    <Compile Include="Seguridad\SesionUsuario.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

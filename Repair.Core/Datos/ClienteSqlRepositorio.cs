@@ -71,16 +71,24 @@ OR Telefono LIKE @Patron ESCAPE N'~' OR Correo LIKE @Patron ESCAPE N'~' ORDER BY
             try
             {
                 using (var conexion = new SqlConnection(cadena))
-                using (var comando = new SqlCommand(@"INSERT INTO dbo.Clientes (Nombre, Telefono, Correo, Notas)
-OUTPUT INSERTED.Id VALUES (@Nombre, @Telefono, @Correo, @Notas);", conexion))
                 {
-                    comando.CommandTimeout = 10;
-                    comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100).Value = cliente.Nombre;
-                    comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 25).Value = cliente.Telefono;
-                    comando.Parameters.Add("@Correo", SqlDbType.NVarChar, 150).Value = Nulo(cliente.Correo);
-                    comando.Parameters.Add("@Notas", SqlDbType.NVarChar, 300).Value = Nulo(cliente.Notas);
                     await conexion.OpenAsync();
-                    return Convert.ToInt32(await comando.ExecuteScalarAsync());
+                    using (var transaccion = conexion.BeginTransaction())
+                    {
+                        using (var comando = new SqlCommand(@"INSERT INTO dbo.Clientes (Nombre, Telefono, Correo, Notas)
+OUTPUT INSERTED.Id VALUES (@Nombre, @Telefono, @Correo, @Notas);", conexion, transaccion))
+                        {
+                            comando.CommandTimeout = 10;
+                            comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100).Value = cliente.Nombre;
+                            comando.Parameters.Add("@Telefono", SqlDbType.NVarChar, 25).Value = cliente.Telefono;
+                            comando.Parameters.Add("@Correo", SqlDbType.NVarChar, 150).Value = Nulo(cliente.Correo);
+                            comando.Parameters.Add("@Notas", SqlDbType.NVarChar, 300).Value = Nulo(cliente.Notas);
+                            var id = Convert.ToInt32(await comando.ExecuteScalarAsync());
+
+                            transaccion.Commit();
+                            return id;
+                        }
+                    }
                 }
             }
             catch (SqlException ex) { throw new AccesoDatosException(ex); }

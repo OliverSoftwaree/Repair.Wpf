@@ -4,7 +4,7 @@
   <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,4,0">
     <StackPanel MaxWidth="850" HorizontalAlignment="Stretch">
       <TextBlock Text="Seguimiento y entrega" FontSize="30" FontWeight="SemiBold" TextWrapping="Wrap" />
-      <TextBlock Text="Consulta el estado, equipo y diagnóstico por número de orden. Solo lectura." Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,7,0,20" />
+      <TextBlock Text="Consulta la orden y continúa el trabajo según tu rol." Style="{StaticResource MutedText}" TextWrapping="Wrap" Margin="0,7,0,20" />
       <Border Style="{StaticResource Card}" Margin="0,0,0,16">
         <StackPanel>
           <Label Content="_Número de orden" Target="{Binding ElementName=NumeroOrden}" FontWeight="SemiBold" Padding="0,0,0,7" />
@@ -48,6 +48,10 @@
             </StackPanel>
           </Border>
           <TextBlock x:Name="FechaEntrega" Visibility="Collapsed" TextWrapping="Wrap" Margin="0,15,0,0" FontWeight="SemiBold" />
+          <WrapPanel Margin="0,16,0,0">
+            <Button x:Name="Avanzar" Visibility="Collapsed" Click="Avanzar_Click" Style="{StaticResource PrimaryButton}" Margin="0,0,10,0"/>
+            <Button x:Name="Reingresar" Visibility="Collapsed" Content="Registrar nuevo ingreso" Click="Reingresar_Click"/>
+          </WrapPanel>
         </StackPanel>
       </Border>
     </StackPanel>

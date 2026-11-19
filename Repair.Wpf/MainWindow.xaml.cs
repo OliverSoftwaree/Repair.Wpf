@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -21,6 +21,9 @@ namespace Repair.Wpf
     public partial class MainWindow : Window
     {
         private readonly ClienteServicio servicio;
+        private OrdenServicio ordenServicio;
+        private Repair.Core.Seguridad.SesionUsuario sesion;
+        private IEquipoRepositorio repositorioEquipos;
         private readonly IModuloEquipos equipos;
         private readonly bool demostracion;
         private readonly bool? animacionesConfiguradas;
@@ -73,6 +76,7 @@ namespace Repair.Wpf
                 IEquipoRepositorio repo;
                 if (demostracion) repo = new Repair.Wpf.Demostracion.EquipoMemoriaRepositorio();
                 else repo = new EquipoSqlRepositorio(System.Configuration.ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString);
+                if (repositorioEquipos != null) repo = repositorioEquipos;
                 var servicioEquipos = new EquipoServicio(repo);
                 EquiposControl.Initialize(servicioEquipos, servicio);
                 // Si hay un módulo externo disponible, mostrar botón para abrir la ventana también.
@@ -83,6 +87,10 @@ namespace Repair.Wpf
 
         private void ShowPage(string pagina, bool animar = true)
         {
+            DiagnosticoPage.Visibility = pagina == "Diagnostico" ? Visibility.Visible : Visibility.Collapsed;
+            ReportesPage.Visibility = pagina == "Reportes" ? Visibility.Visible : Visibility.Collapsed;
+            NavDiagnostico.Tag = pagina == "Diagnostico" ? "Active" : null;
+            NavReportes.Tag = pagina == "Reportes" ? "Active" : null;
             HomePage.Visibility = pagina == "Inicio" ? Visibility.Visible : Visibility.Collapsed;
             ClientsPage.Visibility = pagina == "Clientes" ? Visibility.Visible : Visibility.Collapsed;
             DevicesPage.Visibility = pagina == "Equipos" ? Visibility.Visible : Visibility.Collapsed;
@@ -390,9 +398,9 @@ namespace Repair.Wpf
             var d = DisposicionAdaptable.Para(ActualWidth > 0 ? ActualWidth : Width);
             SidebarColumn.Width = new GridLength(d.MenuCompacto ? 80 : 232);
             SidebarContent.Margin = new Thickness(d.MenuCompacto ? 12 : 18, 28, d.MenuCompacto ? 12 : 18, 20);
-            foreach (var item in new FrameworkElement[] { BrandText, NavHomeText, NavClientsText, NavDevicesText, NavSeguimientoText, TeamText, NextModuleLabel }) item.Visibility = d.MenuCompacto ? Visibility.Collapsed : Visibility.Visible;
+            foreach (var item in new FrameworkElement[] { BrandText, NavHomeText, NavClientsText, NavDevicesText, NavSeguimientoText, NavDiagnosticoText, NavReportesText, TeamText, NextModuleLabel }) item.Visibility = d.MenuCompacto ? Visibility.Collapsed : Visibility.Visible;
             WorkspaceLabel.Visibility = d.MenuCompacto ? Visibility.Collapsed : Visibility.Visible;
-            foreach (var boton in new[] { NavHome, NavClients, NavDevices, NavSeguimiento }) boton.Padding = new Thickness(d.MenuCompacto ? 12 : 14, 12, d.MenuCompacto ? 12 : 14, 12);
+            foreach (var boton in new[] { NavHome, NavClients, NavDevices, NavSeguimiento, NavDiagnostico, NavReportes }) boton.Padding = new Thickness(d.MenuCompacto ? 12 : 14, 12, d.MenuCompacto ? 12 : 14, 12);
             ContentArea.Margin = new Thickness(d.MenuCompacto ? 22 : 34, 24, d.MenuCompacto ? 22 : 34, 22);
             HeroArtColumn.Width = new GridLength(d.MostrarIlustracion ? 270 : 0);
             HeroArt.Visibility = d.MostrarIlustracion ? Visibility.Visible : Visibility.Collapsed;
@@ -432,7 +440,9 @@ namespace Repair.Wpf
         private void Close_Click(object sender, RoutedEventArgs e) { Close(); }
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (ocupado || panelEnTransicion || (EquiposControl != null && EquiposControl.OperacionEnCurso)) { e.Cancel = true; ShowToast("Espera a que termine la operación antes de cerrar.", false); }
+            if (ocupado || panelEnTransicion || (EquiposControl != null && EquiposControl.OperacionEnCurso)
+                || DiagnosticoPage.OperacionEnCurso || SeguimientoPage.OperacionEnCurso)
+            { e.Cancel = true; ShowToast("Espera a que termine la operación antes de cerrar.", false); }
             else toastTimer.Stop();
         }
     }

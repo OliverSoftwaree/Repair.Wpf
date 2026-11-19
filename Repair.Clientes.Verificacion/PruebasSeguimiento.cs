@@ -68,7 +68,7 @@ namespace Repair.Clientes.Verificacion
                 Elemento<TextBlock>(pagina, "DiagnosticoOrden").Text == "Ventilador averiado" &&
                 Elemento<TextBlock>(pagina, "FechaEntrega").Text.StartsWith("Entrega registrada"), "Muestra diagnóstico, equipo y fecha de entrega", log);
             Exigir(typeof(IConsultaSeguimiento).GetMethods().Single().Name == "BuscarPorIdAsync" &&
-                Botones(pagina).SequenceEqual(new[] { buscar }), "La interfaz de datos y la pantalla ofrecen solo consulta", log);
+                Botones(pagina).Where(b => b.Visibility == Visibility.Visible).SequenceEqual(new[] { buscar }), "Sin sesión de entrega inyectada, la pantalla ofrece solo consulta", log);
 
             foreach (int ancho in new[] { 1380, 760 })
             {
