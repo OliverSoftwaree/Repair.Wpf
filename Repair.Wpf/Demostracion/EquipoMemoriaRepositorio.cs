@@ -22,6 +22,12 @@ namespace Repair.Wpf.Demostracion
         }
         public Task<int> AgregarAsync(Equipo equipo)
         {
+            var existente = filas.FirstOrDefault(e => e.ClienteId == equipo.ClienteId &&
+                string.Equals(e.Marca, equipo.Marca, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.Modelo, equipo.Modelo, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(e.Serie ?? string.Empty, equipo.Serie ?? string.Empty, StringComparison.OrdinalIgnoreCase));
+            if (existente != null) return Task.FromResult(existente.Id);
+
             var copia = Copiar(equipo); copia.Id = filas.Count + 1; copia.CreadoUtc = DateTime.UtcNow;
             filas.Add(copia); return Task.FromResult(copia.Id);
         }

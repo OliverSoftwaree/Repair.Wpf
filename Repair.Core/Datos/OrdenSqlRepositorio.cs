@@ -10,7 +10,7 @@ namespace Repair.Core.Datos
     public sealed class OrdenSqlRepositorio : IOrdenRepositorio
     {
         private readonly string cadena;
-        private const string Campos = "Id, ClienteId, Estado, Diagnostico, Observaciones, CreadoUtc";
+        private const string Campos = "Id, ClienteId, EquipoId, Estado, Diagnostico, Observaciones, CreadoUtc, EntregadaUtc";
 
         public OrdenSqlRepositorio(string cadenaConexion)
         {
@@ -75,11 +75,12 @@ ORDER BY Id DESC;", conexion))
             try
             {
                 using (var conexion = new SqlConnection(cadena))
-                using (var comando = new SqlCommand(@"INSERT INTO dbo.Ordenes (ClienteId, Estado, Diagnostico, Observaciones)
-OUTPUT INSERTED.Id VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);", conexion))
+                using (var comando = new SqlCommand(@"INSERT INTO dbo.Ordenes (ClienteId, EquipoId, Estado, Diagnostico, Observaciones)
+OUTPUT INSERTED.Id VALUES (@ClienteId, @EquipoId, @Estado, @Diagnostico, @Observaciones);", conexion))
                 {
                     comando.CommandTimeout = 10;
                     comando.Parameters.Add("@ClienteId", SqlDbType.Int).Value = orden.ClienteId;
+                    comando.Parameters.Add("@EquipoId", SqlDbType.Int).Value = orden.EquipoId.HasValue ? (object)orden.EquipoId.Value : DBNull.Value;
                     comando.Parameters.Add("@Estado", SqlDbType.NVarChar, 50).Value = string.IsNullOrWhiteSpace(orden.Estado) ? "Pendiente" : orden.Estado;
                     comando.Parameters.Add("@Diagnostico", SqlDbType.NVarChar, -1).Value = Nulo(orden.Diagnostico);
                     comando.Parameters.Add("@Observaciones", SqlDbType.NVarChar, -1).Value = Nulo(orden.Observaciones);
@@ -100,7 +101,7 @@ OUTPUT INSERTED.Id VALUES (@ClienteId, @Estado, @Diagnostico, @Observaciones);",
                 using (var comando = new SqlCommand(@"UPDATE dbo.Ordenes
 SET Diagnostico = @Diagnostico,
     Observaciones = @Observaciones,
-    Estado = 'En diagnóstico'
+    Estado = CASE WHEN Estado = N'Pendiente' THEN N'En diagnóstico' ELSE Estado END
 WHERE Id = @Id;", conexion))
                 {
                     comando.CommandTimeout = 10;
@@ -127,10 +128,12 @@ WHERE Id = @Id;", conexion))
             {
                 Id = lector.GetInt32(0),
                 ClienteId = lector.GetInt32(1),
-                Estado = lector.IsDBNull(2) ? "Pendiente" : lector.GetString(2),
-                Diagnostico = lector.IsDBNull(3) ? "" : lector.GetString(3),
-                Observaciones = lector.IsDBNull(4) ? "" : lector.GetString(4),
-                CreadoUtc = DateTime.SpecifyKind(lector.GetDateTime(5), DateTimeKind.Utc)
+                EquipoId = lector.IsDBNull(2) ? (int?)null : lector.GetInt32(2),
+                Estado = lector.IsDBNull(3) ? "Pendiente" : lector.GetString(3),
+                Diagnostico = lector.IsDBNull(4) ? "" : lector.GetString(4),
+                Observaciones = lector.IsDBNull(5) ? "" : lector.GetString(5),
+                CreadoUtc = DateTime.SpecifyKind(lector.GetDateTime(6), DateTimeKind.Utc),
+                EntregadaUtc = lector.IsDBNull(7) ? (DateTime?)null : DateTime.SpecifyKind(lector.GetDateTime(7), DateTimeKind.Utc)
             };
         }
     }

@@ -55,14 +55,6 @@ namespace Repair.Core.Logica
                 errores["Condicion"] = "Describe la condición con 5 a 500 caracteres.";
             if (errores.Count > 0) throw new ValidacionException(errores);
 
-            // Prevención básica de duplicados: mismo cliente, misma marca, modelo y serie.
-            var existentes = await repositorio.BuscarAsync("");
-            bool duplicado = existentes.Any(e => e.ClienteId == equipo.ClienteId &&
-                string.Equals(e.Marca, equipo.Marca, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(e.Modelo, equipo.Modelo, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(e.Serie ?? string.Empty, equipo.Serie ?? string.Empty, StringComparison.OrdinalIgnoreCase));
-            if (duplicado) throw new ValidacionException(new Dictionary<string, string> { { "Duplicado", "Ya existe un equipo con la misma marca, modelo y serie para este cliente." } });
-
             return await repositorio.AgregarAsync(equipo);
         }
 

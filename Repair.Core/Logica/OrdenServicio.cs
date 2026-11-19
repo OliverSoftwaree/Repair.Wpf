@@ -36,6 +36,7 @@ namespace Repair.Core.Logica
             var copia = new OrdenTrabajo
             {
                 ClienteId = orden.ClienteId,
+                EquipoId = orden.EquipoId,
                 Estado = (orden.Estado ?? "Pendiente").Trim(),
                 Diagnostico = (orden.Diagnostico ?? "").Trim(),
                 Observaciones = (orden.Observaciones ?? "").Trim(),

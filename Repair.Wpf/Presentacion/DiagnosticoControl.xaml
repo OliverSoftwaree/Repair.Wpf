@@ -4,8 +4,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="760">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="8">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -29,40 +34,58 @@
                 <StackPanel>
                     <TextBlock x:Name="OrdenInfoText" Text="Busca una orden por ID para comenzar el diagnóstico." Foreground="#5B6E76" />
                     <TextBlock x:Name="ClienteInfoText" Text="Cliente: --" Margin="0,6,0,0" Foreground="#425862" FontWeight="SemiBold" />
+                    <TextBlock x:Name="EquipoInfoText" Text="Equipo: --" Margin="0,6,0,0" Foreground="#425862" TextWrapping="Wrap" />
                     <TextBlock x:Name="EstadoText" Text="Estado: --" Margin="0,8,0,0" FontWeight="SemiBold" />
                 </StackPanel>
             </Border>
 
             <StackPanel Grid.Row="2" >
-                <TextBlock Text="Diagnóstico técnico" Margin="0,0,0,6" FontWeight="SemiBold" />
-                <TextBox x:Name="DiagnosticoInput" Height="120" TextWrapping="Wrap" AcceptsReturn="True" />
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="260" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Severidad" Margin="0,0,0,4" FontWeight="SemiBold" />
+                        <ComboBox x:Name="SeveridadCombo" SelectedIndex="1" SelectionChanged="DiagnosticoPreview_Changed">
+                            <ComboBoxItem Content="Leve" />
+                            <ComboBoxItem Content="Media" />
+                            <ComboBoxItem Content="Grave" />
+                            <ComboBoxItem Content="Crítica" />
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                        <TextBlock Text="Acción recomendada" Margin="0,0,0,4" FontWeight="SemiBold" />
+                        <ComboBox x:Name="AccionCombo" SelectedIndex="0" SelectionChanged="DiagnosticoPreview_Changed">
+                            <ComboBoxItem Content="Revisar" />
+                            <ComboBoxItem Content="Cambiar pieza" />
+                            <ComboBoxItem Content="Enviar a fábrica" />
+                            <ComboBoxItem Content="No reparable" />
+                            <ComboBoxItem Content="Reparado" />
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
 
-                <TextBlock Text="Hallazgos / piezas / observaciones" Margin="0,12,0,6" FontWeight="SemiBold" />
-                <TextBox x:Name="ObservacionesInput" Height="90" TextWrapping="Wrap" AcceptsReturn="True" />
+                <TextBlock Text="Diagnóstico técnico" Margin="0,6,0,4" FontWeight="SemiBold" />
+                <TextBox x:Name="DiagnosticoInput" Height="82" TextWrapping="Wrap" AcceptsReturn="True" TextChanged="DiagnosticoPreview_Changed" VerticalScrollBarVisibility="Auto" />
+                <Border BorderBrush="#E1E6E8" BorderThickness="1" CornerRadius="8" Padding="8" Margin="0,6,0,0">
+                    <TextBlock x:Name="DiagnosticoPreviewText" TextWrapping="Wrap" Foreground="#5B6E76" MaxHeight="38" />
+                </Border>
 
-                <TextBlock Text="Severidad" Margin="0,12,0,6" FontWeight="SemiBold" />
-                <ComboBox x:Name="SeveridadCombo" Width="220" HorizontalAlignment="Left" SelectedIndex="1">
-                    <ComboBoxItem Content="Leve" />
-                    <ComboBoxItem Content="Media" />
-                    <ComboBoxItem Content="Grave" />
-                    <ComboBoxItem Content="Crítica" />
-                </ComboBox>
-
-                <TextBlock Text="Acción recomendada" Margin="0,12,0,6" FontWeight="SemiBold" />
-                <ComboBox x:Name="AccionCombo" Width="260" HorizontalAlignment="Left" SelectedIndex="0">
-                    <ComboBoxItem Content="Revisar" />
-                    <ComboBoxItem Content="Cambiar pieza" />
-                    <ComboBoxItem Content="Enviar a fábrica" />
-                    <ComboBoxItem Content="No reparable" />
-                    <ComboBoxItem Content="Reparado" />
-                </ComboBox>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-                    <Button x:Name="GuardarDiagnosticoButton" Width="180" Content="Guardar diagnóstico" Click="GuardarDiagnosticoButton_Click" />
-                </StackPanel>
-
-                <TextBlock x:Name="MensajeText" Margin="0,12,0,0" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed" />
+                <TextBlock Text="Hallazgos del ingreso / piezas / observaciones" Margin="0,8,0,4" FontWeight="SemiBold" />
+                <TextBox x:Name="ObservacionesInput" Height="62" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" />
             </StackPanel>
-        </Grid>
-    </ScrollViewer>
+            </Grid>
+        </ScrollViewer>
+        <Border Grid.Row="1" Background="#F5F7F8" BorderBrush="#E1E6E8" BorderThickness="0,1,0,0" Padding="8,6" Margin="0,6,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="MensajeText" VerticalAlignment="Center" Foreground="Red" TextWrapping="Wrap" MaxHeight="38" Visibility="Collapsed" />
+                <Button x:Name="GuardarDiagnosticoButton" Grid.Column="1" Width="180" Height="34" Content="Guardar diagnóstico" Click="GuardarDiagnosticoButton_Click" />
+            </Grid>
+        </Border>
+    </Grid>
 </UserControl>

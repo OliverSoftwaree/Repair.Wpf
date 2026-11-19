@@ -84,7 +84,7 @@ namespace Repair.Wpf
                 else repo = new EquipoSqlRepositorio(System.Configuration.ConfigurationManager.ConnectionStrings["RepairSql"]?.ConnectionString);
                 var servicioEquipos = new EquipoServicio(repo);
                 EquiposControl.Initialize(servicioEquipos, servicio);
-                DiagnosticoControl.Initialize(ordenServicio, servicio);
+                DiagnosticoControl.Initialize(ordenServicio, servicio, servicioEquipos);
                 // Si hay un módulo externo disponible, mostrar botón para abrir la ventana también.
                 OpenEquiposWindowButton.Visibility = equipos != null ? Visibility.Visible : Visibility.Collapsed;
             }
@@ -189,10 +189,11 @@ namespace Repair.Wpf
             if (panelAbierto || ocupado) return;
             ShowPage("Equipos");
         }
-        private void NavDiagnostico_Click(object sender, RoutedEventArgs e)
+        private async void NavDiagnostico_Click(object sender, RoutedEventArgs e)
         {
             if (panelAbierto || ocupado) return;
             ShowPage("Diagnostico");
+            await DiagnosticoControl.ActualizarDatosAsync();
         }
 
         private async void Search_Click(object sender, RoutedEventArgs e) { await LoadClientsAsync(); }

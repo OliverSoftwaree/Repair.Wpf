@@ -20,7 +20,8 @@ namespace Repair.Wpf.Demostracion
 
         private void Semilla(int id, int clienteId, string estado, string diagnostico, string observaciones)
         {
-            filas.Add(new OrdenTrabajo { Id = id, ClienteId = clienteId, Estado = estado, Diagnostico = diagnostico, Observaciones = observaciones, CreadoUtc = DateTime.UtcNow.AddDays(-id) });
+            int? equipoId = id == 1 ? 1 : id == 2 ? 3 : id == 3 ? 2 : (int?)null;
+            filas.Add(new OrdenTrabajo { Id = id, ClienteId = clienteId, EquipoId = equipoId, Estado = estado, Diagnostico = diagnostico, Observaciones = observaciones, CreadoUtc = DateTime.UtcNow.AddDays(-id) });
         }
 
         public Task<IReadOnlyList<OrdenTrabajo>> BuscarAsync(string texto)
@@ -53,7 +54,7 @@ namespace Repair.Wpf.Demostracion
             if (fila == null) return Task.CompletedTask;
             fila.Diagnostico = diagnostico ?? "";
             fila.Observaciones = observaciones ?? "";
-            fila.Estado = "En diagnóstico";
+            if (fila.Estado == "Pendiente") fila.Estado = "En diagnóstico";
             return Task.CompletedTask;
         }
 
@@ -65,7 +66,7 @@ namespace Repair.Wpf.Demostracion
         private static OrdenTrabajo Copiar(OrdenTrabajo o)
         {
             if (o == null) return null;
-            return new OrdenTrabajo { Id = o.Id, ClienteId = o.ClienteId, Estado = o.Estado, Diagnostico = o.Diagnostico, Observaciones = o.Observaciones, CreadoUtc = o.CreadoUtc };
+            return new OrdenTrabajo { Id = o.Id, ClienteId = o.ClienteId, EquipoId = o.EquipoId, Estado = o.Estado, Diagnostico = o.Diagnostico, Observaciones = o.Observaciones, CreadoUtc = o.CreadoUtc, EntregadaUtc = o.EntregadaUtc };
         }
     }
 }

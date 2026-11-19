@@ -24,11 +24,14 @@ BEGIN
 	(
 		Id int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Ordenes PRIMARY KEY,
 		ClienteId int NOT NULL,
+		EquipoId int NULL,
 		Estado nvarchar(50) NOT NULL CONSTRAINT DF_Ordenes_Estado DEFAULT ('Pendiente'),
 		Diagnostico nvarchar(max) NULL,
 		Observaciones nvarchar(max) NULL,
 		CreadoUtc datetime2(0) NOT NULL CONSTRAINT DF_Ordenes_CreadoUtc DEFAULT SYSUTCDATETIME(),
-		CONSTRAINT FK_Ordenes_Clientes FOREIGN KEY (ClienteId) REFERENCES dbo.Clientes(Id)
+		EntregadaUtc datetime2(7) NULL,
+		CONSTRAINT FK_Ordenes_Clientes FOREIGN KEY (ClienteId) REFERENCES dbo.Clientes(Id),
+		CONSTRAINT FK_Ordenes_Equipos FOREIGN KEY (EquipoId) REFERENCES dbo.Equipos(Id)
 	);
 END;
 GO
