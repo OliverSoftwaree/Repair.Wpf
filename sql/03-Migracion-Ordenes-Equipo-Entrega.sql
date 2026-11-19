@@ -3,11 +3,13 @@ GO
 
 IF OBJECT_ID(N'dbo.Ordenes', N'U') IS NULL
 BEGIN
-	THROW 50001, N'No existe dbo.Ordenes. Ejecute primero el script de creación del esquema.', 1;
+	RAISERROR(N'No existe dbo.Ordenes. Ejecute primero el script de creación del esquema.', 16, 1);
+	RETURN;
 END;
 IF OBJECT_ID(N'dbo.Equipos', N'U') IS NULL
 BEGIN
-	THROW 50002, N'No existe dbo.Equipos. Ejecute primero el script de creación del esquema.', 1;
+	RAISERROR(N'No existe dbo.Equipos. Ejecute primero el script de creación del esquema.', 16, 1);
+	RETURN;
 END;
 GO
 
